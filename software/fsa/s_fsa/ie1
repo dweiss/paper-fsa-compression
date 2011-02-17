@@ -1,0 +1,127 @@
+#!/bin/bash
+# This script tries to isolate data that provokes errors in a program
+# Synopsis: ie1 file1
+# where file is a data file for the program
+# The result is in /tmp/q1
+#
+# This function tests the data
+function f1() {
+  ./fsa_build -O -i $1 -o $1.fsa
+  if [ $? -ne 0 ] ; then
+    echo "fsa_build crashed!"
+    return 1
+  fi
+  ./fsa_prefix -a -d $1.fsa > /dev/null
+  if [ $? -ne 0 ] ; then
+    echo "fsa_prefix crashed!"
+    return 1
+  fi
+  cat $1 | ./fsa_spell -e 0 -d $1.fsa | fgrep '*not found*' > /dev/null
+  if [ $? -ne 1 ] ; then
+    echo "fsa_spell found missing words!"
+    return 1
+#   else
+#     return 0
+  fi
+  # Comment out this if the package compiled with NUMBERS
+  ./fsa_build -N -i $1 -o $1.fsa
+  if [ $? -ne 0 ] ; then
+    echo "fsa_build -N crashed"
+    return 1
+  fi
+  ./fsa_hash -N -i $1 -d $1.fsa | fgrep '*not found*' > /dev/null
+  if [ $? -ne 1 ] ; then
+    echo "fsa_hash could not find words"
+    return 1
+#   else
+#     return 0
+  fi
+  n=`wc -l $1 | awk '{print $1;}'`
+  rm -f /tmp/n1to$n
+  i=0;while [ $i -le $n ] ; do echo $i >> /tmp/n1to$n; i=$((i+1)); done
+  ./fsa_hash -W -d $1.fsa -i /tmp/n1to$n | fgrep '*not found*' > /dev/null
+  if [ $? -ne 1 ] ; then
+    echo "fsa_hash could not find words with given numbers"
+    rm -f /tmp/n1to$n
+    return 1
+  else
+    rm -f /tmp/n1to$n
+    return 0
+  fi
+}
+# Chop off the tail
+no_of_lines=`wc -l $1 | awk '{print $1;}'`
+deleted=1
+cp $1 /tmp/q2
+while [ $deleted -gt 0 ] ; do
+  right=$no_of_lines
+  deleted=0
+  left=1
+  while [ $left -le $right ] ; do
+    middle=$(((left + right) / 2))
+    head -${middle} /tmp/q2 > /tmp/q1
+    echo "Trying +${middle}-$((no_of_lines - middle))" 
+    if f1 /tmp/q1 ; then
+      echo "Exit status is $?"
+      left=$((middle + 1))
+    else
+      echo "Exit status is $?"
+      right=$((middle - 1))
+    fi
+  done
+#  first=$((left + 1))
+  first=$left
+# Now chop off the first lines
+  right=$first
+  left=1
+  while [ $left -le $right ] ; do
+    middle=$(((left + right) / 2))
+    head -${first} /tmp/q2 | tail -${middle} > /tmp/q1
+    echo "Trying -$((first - middle))+$((middle))-$((no_of_lines - first))" 
+    if f1 /tmp/q1 ; then
+      echo "Exit status is $?"
+      left=$((middle + 1))
+    else
+      echo "Exit status is $?"
+      right=$((middle - 1))
+    fi
+  done
+#  last=$((left + 1))
+  last=$left
+  echo "Isolated a range of $last lines"
+  head -${first} /tmp/q2 | tail -${last} > /tmp/q1 # was tail with middle
+# Now we have the range in /tmp/q1
+# Try to delete ranges of lines inside
+  no_of_lines=`wc -l /tmp/q1 | awk '{print $1;}'`
+  cp /tmp/q1 /tmp/q2
+  first=1
+  last=$((no_of_lines - 1))
+  cp /tmp/q1 /tmp/q3
+  while [ $first -lt $no_of_lines ] ; do
+    left=1
+    right=$((last - 1))
+    while [ $left -le $right ] ; do
+      middle=$(((left + right) / 2))
+      head -${first} /tmp/q2 > /tmp/q1
+      tail -${middle} /tmp/q2 >> /tmp/q1
+      echo "Trying +${first}-$((last - middle))+${middle}"
+      if f1 /tmp/q1 ; then
+        echo "Exit status is $?"
+	left=$((middle + 1))
+      else
+        echo "Exit status is $?"
+	right=$((middle - 1))
+	cp /tmp/q1 /tmp/q3
+	deleted=1
+      fi
+    done
+    cp /tmp/q3 /tmp/q2
+    no_of_lines=`wc -l /tmp/q2 | awk '{print $1;}'`
+    first=$((first + 1))
+    last=$((no_of_lines - first))
+  done
+done
+cp /tmp/q2 /tmp/q1
+f1 /tmp/q1
+echo "Now no of lines is $no_of_lines"
+echo "the result is in /tmp/q1"

@@ -1,0 +1,65 @@
+!SPARSE	SPARSE	Command
+ 4.69	 90.76	fsa_build -i /tmp/engw -o /tmp/engw.fsa
+ 6.94	 73.29	fsa_build -O -i /tmp/engw -o /tmp/engwO.fsa
+ 4.89	 91.67	fsa_build -N -i /tmp/engw -o /tmp/engwO.fsa
+14.30	222.81	fsa_build -i ~/Data/French/words -o /tmp/frw.fsa
+17.92	242.34	fsa_build -O -i ~/Data/French/words -o /tmp/frwO.fsa
+14.38	223.33	fsa_build -N -i ~/Data/French/words -o /tmp/frwN.fsa
+42.18	844.32	fsa_build -i ~/Data/German/words -o /tmp/dew.fsa
+48.73	249.14	fsa_build -O -i ~/Data/German/words -o /tmp/dewO.fsa
+42.69	850.77	fsa_build -N -i ~/Data/German/words -o /tmp/dewN.fsa
+
+453.23	754.48	fsa_build -i ~/Data/French/French_ISSCO_fsm -o /tmp/fr.fsm
+460.11	793.25	fsa_build -O -i ~/Data/French/French_ISSCO_fsm -o /tmp/frO.fsm
+6486.30 7211.00	fsa_build -i ~/Data/German/german_fsm -o /tmp/de.fsm
+6501.00 6747.10	fsa_build -O -i ~/Data/German/german_fsm -o /tmp/deO.fsm
+
+ 11.21	 10.60	fsa_spell -e 0 -i /tmp/engw -d /tmp/dewN.fsa
+  8.67	  8.11	fsa_spell -e 0 -i /tmp/engw -d /tmp/engw.fsa
+  8.32	  8.14	fsa_spell -e 0 -i /tmp/engw -d /tmp/engwO.fsa
+  8.70	  8.16	fsa_spell -e 0 -i /tmp/engw -d /tmp/engwN.fsa
+ 42.68	 40.67	fsa_spell -e 0 -i ~/Data/French/words -d /tmp/frw.fsa
+ 42.14	 40.67	fsa_spell -e 0 -i ~/Data/French/words -d /tmp/frwO.fsa
+ 42.78	 40.69	fsa_spell -e 0 -i ~/Data/French/words -d /tmp/frwN.fsa
+174.20	162.48	fsa_spell -e 0 -i ~/Data/German/words -d /tmp/dew.fsa
+168.24	162.49	fsa_spell -e 0 -i ~/Data/German/words -d /tmp/dewO.fsa
+173.94	162.70	fsa_spell -e 0 -i ~/Data/German/words -d /tmp/dewN.fsa
+461.97	630.27	fsa_spell -i /tmp/engw -d /tmp/frw.fsa
+
+  4.41	  7.21	fsa_prefix -a -d /tmp/engw.fsa
+  4.36	  7.21	fsa_prefix -a -d /tmp/engwO.fsa
+  4.42	  7.28	fsa_prefix -a -d /tmp/engwN.fsa
+ 22.64	 30.34	fsa_prefix -a -d /tmp/frw.fsa
+ 22.68	 30.37	fsa_prefix -a -d /tmp/frwO.fsa
+ 22.73	 30.38	fsa_prefix -a -d /tmp/frwN.fsa
+ 96.41	115.47	fsa_prefix -a -d /tmp/dew.fsa
+ 96.43	115.52	fsa_prefix -a -d /tmp/dewO.fsa
+ 96.67	115.82	fsa_prefix -a -d /tmp/dewN.fsa
+
+ 14.47	 10.25	fsa_hash -N -i /tmp/engw -d /tmp/engwN.fsa
+ 71.40	 52.23	fsa_hash -N -i ~/Data/French/words -d /tmp/frwN.fsa
+296.82	207.26	fsa_hash -N -i ~/Data/German/words -d /tmp/dewN.fsa
+ 14.95	 20.28	fsa_hash -W -i /tmp/n1to45378 -d /tmp/engwN.fsa
+ 74.31	 94.69	fsa_hash -W -i /tmp/n1to210224 -d /tmp/frwN.fsa
+310.09	437.93	fsa_hash -W -i /tmp/n1to716273 -d /tmp/dewN.fsa
+
+ 195.12  187.97	fsa_morph -i ~/Data/French/words -d /tmp/fr.fsm
+ 196.76	 189.06	fsa_morph -i ~/Data/French/words -d /tmp/frO.fsm
+3473.80 3432.25	fsa_morph -i ~/Data/German/words -d /tmp/de.fsm
+3512.00 3476.10	fsa_morph -i ~/Data/German/words -d /tmp/de0.fsm
+
+Sizes
+!SPARSE	SPARSE	File
+158736	187678	engw.fsa
+153958	187614	engwO.fsa
+204072	281356	engwN.fsa
+152822	172369	frw.fsa
+148502	172377	frwO.fsa
+201836	301410	frwN.fsa
+327636	386993	dew.fsa
+315652	387013	dewO.fsa
+464121	676993	dewN.fsa
+222476	254517	fr.fsm
+217082	253317	frO.fsm
+540708	633664	de.fsm
+527424	633302	deO.fsm

@@ -1,0 +1,4 @@
+Assuming input is already sorted
+Building FSA...                        0.01 sec.  [  0.10 sec.]
+Input sequences                      59,174
+Serializing FSA5...                    0.11 sec.  [  0.21 sec.]

@@ -1,0 +1,16 @@
+pl.dict	morfologik_nx	1806661	wall	41.78	0:41.78	user	42.12	sys	0.15	max-mem-kb	215184	dta	0	inputs	0	outputs	3688
+pl.dict	morfologik	1889235	wall	24.87	0:24.87	user	25.19	sys	0.22	max-mem-kb	199904	dta	0	inputs	0	outputs	3776
+pl.dict	morfologik_fsa5	2890298	wall	19.23	0:19.23	user	19.41	sys	0.22	max-mem-kb	162960	dta	0	inputs	0	outputs	5720
+pl.dict	fsa_build	2718675	wall	132.47	2:12.47	user	131.58	sys	0.81	max-mem-kb	1781520	dta	0	inputs	0	outputs	5520
+mike.dict	morfologik_nx	41330376	wall	480.41	8:00.41	user	476.69	sys	2.51	max-mem-kb	2778848	dta	0	inputs	0	outputs	81104
+mike.dict	morfologik	45352895	wall	216.81	3:36.81	user	214.32	sys	2.45	max-mem-kb	2771936	dta	0	inputs	0	outputs	88864
+mike.dict	morfologik_fsa5	60175818	wall	29.19	0:29.19	user	26.67	sys	2.88	max-mem-kb	2894128	dta	0	inputs	0	outputs	117608
+mike.dict	fsa_build	[OOM]		wall	596.50	9:56.50	user	377.43	sys	24.37	max-mem-kb	15087024	dta	0	inputs	1490296	outputs	704
+naviexpert2.dict	morfologik_nx	95013	wall	1.71	0:01.71	user	1.74	sys	0.15	max-mem-kb	135424	dta	0	inputs	27512	outputs	264
+naviexpert2.dict	morfologik	95182	wall	1.07	0:01.07	user	1.41	sys	0.08	max-mem-kb	139072	dta	0	inputs	960	outputs	264
+naviexpert2.dict	morfologik_fsa5	137398	wall	0.61	0:00.61	user	0.84	sys	0.07	max-mem-kb	142032	dta	0	inputs	0	outputs	344
+naviexpert2.dict	fsa_build	131434	wall	0.18	0:00.18	user	0.15	sys	0.02	max-mem-kb	109664	dta	0	inputs	1376	outputs	272
+naviexpert.dict	morfologik_nx	250158	wall	2.46	0:02.46	user	2.88	sys	0.05	max-mem-kb	149584	dta	0	inputs	1384	outputs	568
+naviexpert.dict	morfologik	252110	wall	1.78	0:01.78	user	2.07	sys	0.05	max-mem-kb	142992	dta	0	inputs	0	outputs	568
+naviexpert.dict	morfologik_fsa5	362708	wall	0.72	0:00.72	user	1.01	sys	0.07	max-mem-kb	146032	dta	0	inputs	0	outputs	784
+naviexpert.dict	fsa_build	341796	wall	0.58	0:00.58	user	0.47	sys	0.11	max-mem-kb	317664	dta	0	inputs	0	outputs	680

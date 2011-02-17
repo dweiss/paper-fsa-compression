@@ -1,0 +1,3 @@
+data-sets/weiss/wikipedia2.dict	morfologik_nx	172731734	wall	1584.73	26:24.73	user	0.00	sys	0.01	max-mem-kb	256512	dta	0	inputs	0	outputs	0
+data-sets/weiss/wikipedia2.dict	morfologik_cfsa2	189132938	wall	682.09	11:22.09	user	0.00	sys	0.01	max-mem-kb	256512	dta	0	inputs	0	outputs	0
+data-sets/weiss/wikipedia2.dict	morfologik_fsa5	248642794	wall	87.29	1:27.29	user	0.00	sys	0.00	max-mem-kb	256000	dta	0	inputs	0	outputs	0

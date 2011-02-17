@@ -1,0 +1,84 @@
+Assuming input is already sorted
+Building FSA...                        0.01 sec.  [  0.07 sec.]
+Input sequences                      17,144
+Serializing CFSA2...          
+Label distribution...         
+0x61                                  3,336
+0x6f                                  3,286
+0x69                                  3,094
+0x65                                  2,666
+0x72                                  2,304
+0x6e                                  2,190
+0x7a                                  1,978
+0x73                                  1,938
+0x63                                  1,917
+0x6b                                  1,848
+0xc5                                  1,556
+0x77                                  1,552
+0x74                                  1,546
+0x6c                                  1,479
+0x79                                  1,340
+0x64                                  1,237
+0x20                                  1,109
+0x75                                    990
+0x6d                                    916
+0x62                                    842
+0x67                                    773
+0x70                                    766
+0x82                                    638
+0xc3                                    616
+0x6a                                    570
+0xc4                                    496
+0x68                                    460
+0xb3                                    359
+0x99                                    283
+0xbc                                    235
+0x9b                                    228
+0x85                                    184
+0x66                                    181
+0x84                                    138
+0x2d                                    117
+0xba                                     67
+0x76                                     52
+0x30                                     41
+0x31                                     34
+0x78                                     22
+0x33                                     21
+0x35                                     21
+0x87                                     20
+0x32                                     18
+0x2e                                     16
+0x39                                     16
+0x2f                                     15
+0x37                                     14
+0x34                                     13
+0x36                                     12
+0x28                                     11
+0x38                                     10
+0x5f                                     10
+0x27                                      6
+0x71                                      4
+0x80                                      2
+0xab                                      2
+0xe2                                      2
+0x21                                      1
+0x26                                      1
+0x29                                      1
+0x9d                                      1
+0x9e                                      1
+0xa1                                      1
+0xa4                                      1
+0xa9                                      1
+0xb6                                      1
+Label distribution...                  0.01 sec.  [  0.12 sec.]
+Compacting...                 
+Initial output size                  98,641
+Moved 25 states, output size         96,345
+Moved 50 states, output size         95,262
+Moved 75 states, output size         94,973
+Moved 100 states, output size        95,028
+Moved 125 states, output size        95,071
+Moved 150 states, output size        95,142
+Will move 150 states, final size       95,142
+Compacting...                          0.12 sec.  [  0.36 sec.]
+Serializing CFSA2...                   0.29 sec.  [  0.37 sec.]

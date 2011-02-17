@@ -1,0 +1,98 @@
+.TH fsa_hash 1 "Jul. 1st, 1999"
+.SH NAME
+fsa_hash - convert words to numbers, and numbers to words
+.SH SYNOPSIS
+.B fsa_hash \-N
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+
+.B fsa_hash \-W
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+
+.SH DESCRIPTION
+.B fsa_hash
+reads lines from the input.  Each line contains either one word, or one
+number. Every word is looked up in specified dictionaries.  If the word
+is found, its number is printed, if not, -1 is printed.  Every number is
+treated as a word number.  The word corresponding to that number is
+printed, or an error message if the word is not present in the
+dictionary.  Note that
+.I fsa_hash
+is only a demo of what the underlying funtions can do.
+.SH OPTIONS
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified.  Only the first dictionary is
+used. Dictionaries are automata built using
+.I fsa_build
+or
+.I fsa_ubuild.
+.TP
+.B \-N
+convert words into numbers.
+.TP
+.B \-W
+convert numbers into words.
+.TP
+.BI "\-i " input_file
+specifies a file with words to be converted to numbers, or numbers to
+be converted to words. More than one file can be
+specified in this way (i.e. the option can be used more than once). In
+absence of this option, standard input is used.
+.TP
+.BI "\-l " language_file
+specifies a file that holds language specific information, i.e. (for now)
+characters that form words, and pairs of (lowercase, uppercase)
+characters for case conversion. If the option is not specified, latin
+letters with standard case conversions wil be used.
+
+Note: whether this information will be used or not depends on the module
+used for I/O handling (one_word_io or text_io).
+.TP
+.B \-v
+prints version details.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid option, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+4
+Not enough memory.
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1),
+.I fsa_guess(1),
+.I fsa_morph(1),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).
+.SH BUGS
+Note that the order of words can be much different from that of the
+input list to 
+.I fsa_ubuild
+or even 
+.I fsa_build.
+It depends on compile options used to build fsa_build or
+fsa_ubuild. Use fsa_prefix to establish what is the actual order of
+words in the automaton.
+
+Send bug reports to the author: Jan Daciuk, jandac@pg.gda.pl.

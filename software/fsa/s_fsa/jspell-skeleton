@@ -1,0 +1,29 @@
+#!/bin/sh
+# This is a skeleton script interface between emacs jspell.el file
+# and fsa utilities. It is badly written by Jan Daciuk, jandac@pg.gda.pl.
+# I had no time to prepare anything smarter than this. Sorry.
+# Feel free to change this file.
+#
+# This file is used to obtain jspell script by replacing XXX variables
+# with appropriate values specified in the Makefile.
+
+JSPELL_DICT_DIR=XXX_DICT_DIR
+JSPELL_CURR_DIR=`pwd`
+JSPELL_EXEC_DIR=XXX_EXEC_DIR
+cd ${JSPELL_DICT_DIR}
+if [ -r ${HOME}/.jspell-words ] ; then
+  if [ -r ${HOME}/.jspell-words.fsa -a -w ${HOME}/.jspell-words.fsa ] ; then
+    if [ ${HOME}/.jspell-words.fsa -ot ${HOME}/.jspell-words ] ; then
+      sort -u ${HOME}/.jspell-words |\
+          ${JSPELL_EXEC_DIR}/fsa_build -o ${HOME}/.jspell-words.fsa
+    fi
+  else
+    sort -u ${HOME}/.jspell-words |\
+          ${JSPELL_EXEC_DIR}/fsa_build -o ${HOME}/.jspell-words.fsa
+  fi
+  JSPELL_PRIV_DICT="-d ${HOME}/.jspell-words.fsa"
+else
+  JSPELL_PRIV_DICT=""
+fi
+${JSPELL_EXEC_DIR}/fsa_spell $@ $JSPELL_PRIV_DICT
+cd ${JSPELL_CURR_DIR}

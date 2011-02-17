@@ -1,0 +1,14 @@
+#!/bin/sh
+# This is a skeleton script interface between emacs jspell.el module
+# and fsa utilities. It is badly written by Jan Daciuk, jandac@pg.gda.pl
+# Feel free to change it.
+#
+# This file is used to produce jaccent script by replacing XXX variables
+# with appropriate values from the Makefile.
+
+JACCENT_DICT_DIR=XXX_DICT_DIR
+JACCENT_CURR_DIR=`pwd`
+JACCENT_EXEC_DIR=XXX_EXEC_DIR
+cd ${JACCENT_DICT_DIR}
+${JACCENT_EXEC_DIR}/fsa_accent $@
+cd ${JACCENT_CURR_DIR}

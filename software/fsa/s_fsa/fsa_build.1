@@ -1,0 +1,212 @@
+.TH fsa_build 1 "Feb. 15th, 2001"
+.SH NAME
+fsa_build, fsa_ubuild - build an automaton from data (words)
+.SH SYNOPSIS
+.B fsa_build
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+
+or
+
+.B fsa_ubuild
+[
+.I options
+] [
+.I > outfile
+]
+.SH DESCRIPTION
+.B fsa_build
+builds an automaton from a list of words. The list should be sorted. It
+is not important which order is used for sorting as long as the order
+is consistent. The input file cannot contain duplicates. Beware of LOCALE
+and LANG settings. They may make sort produce garbage where uppercase and
+lowercase letters are treated as equal.
+
+.B fsa_ubuild
+does the same thing, but more slowly, and using more memory. However,
+data may not be sorted, so it may come directly from another process,
+e.g. a morphology program (possibly modified with a filter).
+
+
+The output is an automaton that can be used by
+.I fsa_spell, fsa_accent, fsa_morph, fsa_guess, fsa_hash, fsa_visual
+and
+.I fsa_prefix. If you do not use -O option, the automata produced by
+.I fsa_build
+and
+.I fsa_ubuild
+may not be identical (the order of arcs may be different), but
+isomorphic. If you do use -O option, the size may differ as well
+(although I have only seen a difference by 1 arc or transition). This
+happens because the compression algorithm does not find the optimal
+solution. Although the algorithm is the same in both cases, the
+ordering of information in the register differs, as hash function uses
+addresses of nodes. Note that the automata are still isomorphic; it is
+only compression rate that varies.
+.SH OPTIONS
+.TP
+.B \-O
+make the resulting automaton smaller.  The time required to build the
+automaton is much greater.  How much greater depends on compile options
+used during compilation of
+.I fsa_build
+or
+.I fsa_ubuild.
+See Makefile and INSTALL from the distribution for an explanation of
+various compile options. The default options compress the automaton the most.
+The \-O option cannot be used with \-N option.
+.TP
+.BI "\-i " input_file
+specifies input file. That file should contain a list of words, one word
+per line. In absence of \-i option, standard input is used instead.
+.TP
+.BI "\-o " output_file
+specifies output file, i.e. where the automaton should be placed. In
+absence of \-o option, standard output is used instead.
+.TP
+.BI "\-A " annotation_separator
+specifies a character that separates words from morphosyntactic
+annotations.
+.TP
+.BI "\-F " filler
+specifies a character that marks the beginning of word for fsa_guess data.
+.TP
+.B \-X
+prepares an index a tergo that is used to predict word categories. This
+option is available only if the program was compiled with A_TERGO
+compile option. Specifying PRUNE_ARCS compile option helps making the
+resulting automaton smaller and faster. These compile options are on by
+default. The format of data depends on compile options used
+to build the
+.I fsa_guess
+program, and affects the outcome of that program.
+
+For fsa_guess compiled without GUESS_LEXEMES, the input data should be a
+list of inverted words with annotations. Each line should contain an
+inverted word (i.e. the first character should be the last character of
+the word, the second one \- the penultimate one, and so on. This
+inverted word should be followed immediately by a filler character and
+an annotation separator, and then by grammatical annotations. They
+specify some morphosyntactic properties of words, such as number,
+gender, etc.
+
+Assuming that a file
+.I file
+contains data in 3 columns: inflected word, canonical form, annotations,
+the following incantation:
+
+awk '{s="";for(i=1;i<=length($1);i++)s=substr($1,i,1) s;printf
+"%s_+%s\\n",s,$3;}' file | sort -u > file.idx
+
+prepares data for the a tergo index. The incantation should be all in
+one line. For more detail see the contents of
+.I prep_atg.awk
+file included
+in the distribution. The standard name extension for automata prepared
+in this way is
+.I atg.
+
+For fsa_guess compiled with GUESS_LEXEMES, but without GUESS_PREFIX, one
+data line should contain the same information as above, but an
+additional annotation separator, a code, and the ending of the
+corresponding lexeme must be inserted in front of the first annotation
+separator. The code specifies how many characters from the end of the
+inflected word must be rejected before appending the ending of the
+lexeme. The code is a letter. 'A' means there are no characters to
+reject, 'B' \- there is one, 'C' \- 2, and so on. For more detail see
+.I prep_atl.awk
+file included in the distribution. The standard name
+extension for automata prepared in this way is
+.I atl.
+
+For fsa_guess compiled with both GUESS_LEXEMES, and GUESS_PREFIX, data
+lines are similar to those specified above. For inflected forms that do
+not contain flectional prefixes, an additional annotation separator is
+added after the first one (see
+.I prep_atp.awk
+file included in the
+distribution). For inflected forms that do contain flectional prefixes,
+the prefix is removed from the inverted word leaving the filler
+character, and it is placed between two annotation separators in simple,
+non-inverted form. The
+.I prep_atp.awk
+file does not
+contain code for recognizing prefixes; it should be modified for
+individual languages and recognize specific morphological
+categories. Only prefixes that differentiate between forms that have the
+same suffix should be recognized. The standard name extension for
+automata prepared in this way is
+.I atp.
+.TP
+.B \-N
+number entries. All entries are numbered according to their position
+(line number) in the input stream. This is so called perfect
+hashing. This option works only if the program was compiled with NUMBERS
+compile option. This option (i.e. \-N) cannot be used with \-O option.
+
+Note that if you use SORT_ON_FREQ, or DESCENDING, or other compile
+options that change the order of arcs in the automaton, the numbers
+attributed to words change as well. However, you still have perfect
+hashing, and you can get the order of words by using
+.I fsa_prefix.
+.TP
+.b \-W
+attach weights to transitions. This option is valid only when the
+program has been compiled with A_TERGO, WEIGHTED, and GENERALIZE. It
+has an effect only if it is used with \-X. Weights on transitions are
+proportional to the number of different strings that are recognized by
+paths in the automaton leading through those transitions. Adding
+weights to transitions changes the format of the automaton, and
+increases its size.
+.TP
+.B \-v
+print version details with compile options used.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid options, or lack of a required option.
+.TP
+4
+Not enough memory.
+.TP
+6
+No annotations, or invalid annotation separator.
+.TP
+20
+Error in index \- order not preserved.
+.TP
+21
+Error in index \- big brother is watching you.
+.TP
+22
+Error in index \- big brother again.
+.TP
+99
+There are more than 255 characters, or 255 arcs per node.
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_guess(1),
+.I fsa_guess(5),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_morph(5),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).
+.SH BUGS
+The size of automata produced with \-O with
+.I fsa_build
+and
+.I fsa_ubuild
+may not be the same. This is not a bug (as the automata are isomorphic
+and minimal) - this is a feature (see above for explanations).
+Send bug reports to the author: Jan Daciuk, jandac@pg.gda.pl.

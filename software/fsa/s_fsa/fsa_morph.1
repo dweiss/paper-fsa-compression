@@ -1,0 +1,87 @@
+.TH fsa_morph 1 "Jul. 1st, 1999"
+.SH NAME
+fsa_morph - perform morphological analysis of a word
+.SH SYNOPSIS
+.B fsa_morph
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+.SH DESCRIPTION
+.B fsa_morph
+reads lines from the input. Each line contains one word. For each
+(inflected) word, its morphological analysis is printed. It consists of
+one or more pairs (lexeme, tag).
+.SH OPTIONS
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified. Dictionaries are automata built using
+.I fsa_ubuild
+or
+.I fsa_build.
+The data for them must be prepared in a special way. Each line of data
+consists of the inflected form, followed by a separator, followed by a
+code, followed by the ending of the lexeme, followed by the separator,
+followed by tags. The code specifies how many characters from the end of
+the inflected form are different from last characters of the lexeme
+(i.e. how many characters constitute the inflected word ending). 'A'
+means that no characters are to be rejected, 'B' \- 1, 'C' \- 2, and so
+on. Though the data is different from the normal word list format, the
+automaton is the same (its content is different), so the magic number is
+the same as with the normal data.
+.TP
+.BI "\-i " input_file
+specifies an input file - file that contains words that should be
+analysed. More than one file can be specified (i.e. the option 
+can be used more than once). In absence of \-i option, standard input is
+used.
+.TP
+.BI "\-l " language_file
+specifies a file that hold language specific information, i.e. (for now)
+characters that form words, and pairs of (lowercase, uppercase)
+characters for case conversion. If the option is not specified, latin
+letters with standard case conversions wil be used.
+
+Note: whether this information will be used or not depends on the module
+used for I/O handling (one_word_io or text_io).
+.TP
+.B \-P
+indicates that the dictionary contains coded prefixes (see
+.I fsa_morph(5)).
+.TP
+.B \-I
+indicates that the dictionary contains coded infixes (see
+.I fsa_morph(5)).
+.TP
+.B \-v
+print version details, including compile options used to build the program.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid options, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+4
+Not enough memory.
+.SH SEE ALSO
+.I fsa_morph(5),
+.I fsa_accent(1),
+.I fsa_build(1),
+.I fsa_guess(1),
+.I fsa_hash(1),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1),
+.I fsa_synth(1).
+.SH BUGS
+Send bug reports to the author: Jan Daciuk, jandac@eti.pg.gda.pl.

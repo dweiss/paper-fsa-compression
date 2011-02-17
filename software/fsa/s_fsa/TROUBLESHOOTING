@@ -1,0 +1,101 @@
+I. CHECK YOUR INPUT DATA FOR AUTOMATA.
+
+I.1. Problems with sorting (for fsa_build - fsa_ubuild should work anyway).
+
+Check the value of your environment variables LANG, and LC_* (i.e. LC_
+followed by any string). LANG should be set to POSIX, all LC_* -
+probably undefined. In bash, you see all variables with the command
+export with no arguments.
+
+You can check whether your sort does the job, by giving it data like
+e.g.:
+
+A
+a
+Abakus
+abakus
+über
+Uffer
+
+If `über' is neither the first, not the last on the list produced by
+sort, or if the rest of words is not in the order `A', `Abakus',
+`Uffer', `a', `abakus', then your sort is broken - check your
+variables again. The solution to this problem is to precede invocation of sort
+with LANG=C, e.g.:
+
+LANG=C sort -u mylist | fsa_build > mylist.fsa
+
+I.2. Duplicates (for fsa_build - fsa_ubuild should work anyway)
+
+Use sort -u to get rid of duplicates. If you use sort without options
+and uniq, use sort first, and then uniq, not the other way round.
+
+I.3. Empty lines.
+
+Some software you use can put them e.g. at the end of your file, so
+that you don't see them. Use e.g. grep to find them and to filter them out.
+
+
+I.4. Additional invisible characters in your data.
+
+Files copied from Windows or Mac may have different/additional
+characters at the end of a line. Use appropriate software for the
+conversion. Also note that some scripts expect horizontal tabulation
+characters (Ctrl-I or HT) as default separators. If you give them
+spaces instead, it looks the same, but it is not the same. If you copy
+and paste parts of data directly from the screen, your HTs will be
+converted to spaces.
+
+I.5. Special characters in your data.
+
+Some characters are used by default for special purposes. These are
+"_" (the filler, an empty character that is ignored by the software),
+and "+" (annotation separator). They can be changed with run-time
+arguments. If your data contains such characters, either convert then
+to something else, or specify different fillers and annotation
+separators for appropriate programs and scripts.
+
+I.6. Check the format of your data.
+
+Read the file README to learn how to prepare the data. The package
+contains a number of scripts to help you, but the input to the scripts
+also has to be in some (very simple) format.
+
+I.7. Isolate data that causes trouble.
+
+If any of the above does not work, try to find the smallest amount of
+input data that reproduces the error. Use binary search to cutt off
+some lines from the end of input file, from the beginning, and after
+each line. If you have bash, you can use the script ie1 provided in
+the package. Change the contents of the function f1() to reflect the
+kind of errors you are looking for.
+
+
+II. Check the compilation.
+
+Always issue:
+
+make clean
+
+before you recompile the package after having changed some compile
+options. If you don't, you're asking for trouble.
+
+Also, some of the programs in the package require some compile options
+with particular combinations of arguments. E.g. you cannot use
+fsa_hash at all if the package is not compiled with NUMBERS.
+
+Some versions of gcclib contain bugs. Use LOOSING_RPM compile
+option. If this does not work, turn optimization off (delete -O2 from
+CPPFLAGS).
+
+
+III. Check the invocation of programs and scripts.
+
+Programs have their man pages, scripts are described in the file README.
+
+
+
+IV. Send a bug report.
+
+If it is a bug, I'd like to hear about it. Send it to jandac at eti.pg.gda.pl.
+

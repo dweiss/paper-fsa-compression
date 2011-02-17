@@ -1,0 +1,379 @@
+Version 0.5:
+- Word length in programs using automata increased to 120.
+- Option `clean' provided in Makefile.
+- Option `-v' provided in all programs (gives version details).
+- Sorting of arcs on frequency in optimization phase of automaton creation.
+- Merging two nodes that share the same arc.
+- This file added.
+Version 0.6:
+- Option -v corrected.
+- fr.acc file added to distribution.
+- man pages provided.
+- Compilation options shown in -v in all programs.
+- Option -X provided in fsa_build (makes an index a tergo for word category
+  guessing).
+- New program - fsa_guess - added; it predicts word categories based on
+  word endings.
+- New program - fsa_hash - added; it is used for perfect hashing.
+- Option -i added to programs using automata; it specifies input files.
+- Option -l added to programs using automata; it provides information
+  on language specific features, such as which characters form words,
+  and on case conversions.
+- New module - text_io - provided that processes text files (many words
+  in line, punctuation, etc.), and gives grep-like output.
+Version 0.7:
+- In one_word_io, replacements are now separated by a comma and a space
+  (was: space only); this makes it possible to have a two-word
+  replacement for one word - in other words: now run-on words can be
+  corrected.
+- New compile option RUNON_WORDS added; if turned on, fsa_spell checks
+  for run-on words, i.e. it checks whether inserting a space somewhere
+  inside the word results in two correct words.
+- New compile option CHCLASS added; if turned on, a dedicated file
+  specifies equivalent sequences of characters, so that e.g. `rz' and
+  `z' with a dot above (\.z in TeX) may be only one edit distance unit
+  apart from each other.
+- Emacs interface for spelling correction added; it is an adaptation of
+  ispell.el.
+Version 0.8:
+- New program fsa_morph performs morphological analysis (but not generation).
+- Improved INSTALL guidelines.
+- README more up to date, obsolete data removed, better file list.
+- fsa_guess now guesses lexemes as well (with GUESS_LEXEMES).
+- awk scripts for data preparation.
+Version 0.9:
+- Corrected a bug that caused segment violations when using dictionaries
+  of different sizes, and thus preventing users from using personal
+  dictionaries.
+- fsa_guess now recognizes prefixes with GUESS_PREFIX option.
+- New options -g and -p for fsa_guess to simulate compile options.
+- Words and lines can now be of arbitrary length.
+- Binary search in leaf vectors of the register - this does speed up
+  processing considerably.
+- New compile option for creating an index a tergo: GENERALIZE; it gives
+  smallest automata sizes.
+- New compile option STATISTICS prints... wait for it... some statistics
+  in fsa_build.
+Version 0.10:
+- Corrected a bug in fsa_build that showed up when using PRUNE_ARCS options
+  while compiling an index a tergo.
+- Corrected a bug in fsa_guess that prevented the proper use of -g option.
+  Now -g and -p are independent.
+- Introduced a limit on the number of analyses in fsa_guess.
+- Introduced a limit on the depth of search for suffixes.
+- Corrected a bug in fsa_build man page.
+- Changed definitions of node and arc_node classes, so that the automaton
+  requires less memory than before (by a quarter).
+Version 0.11:
+- Corrected a bug in statistics.
+- Option -r added to the function usage() in fsa_spell.
+- Removed random inline in fsa.h.
+- Updated #ifdefs so that all #ifdef NUMBERS are enclosed in #ifdef FLEXIBLE.
+- Updated Makefile so that it contains description of NUMBERS
+- Corrected a bug in fsa_build that appeared while reading long input lines
+- Updated description of -v option for all programs
+- Corrected the effect of GENERALIZE option
+- Introduced -m option in fsa_guess (prediction of mmorph descriptions
+  of words based on inflected forms). mmorph is a morphology program
+  available from ISSCO, Geneva, http://www.issco.unige.ch/
+  or http://issco-www.unige.ch/
+- fsa_build is now faster.
+- Corrected a bug in PRUNE_ARCS option application.
+Version 0.12:
+- Added a new program: fsa_ubuild.
+Version 0.13:
+- Corrected a bug in fsa_ubuild that excluded some words from the automaton;
+  the bug was in the function already_there().
+- Added new program: fsa_visual.
+- Added an entry for version 0.12 in this file.
+Version 0.14:
+- Corrected a bug in Makefile (introduced in 0.12) - there was no rule
+  for making buildu_fsa.o.
+- Changed declarations in fsa.h to simplify their use.
+- Added perl scripts (awk scripts translated with a2p) for portability.
+- Corrected a bug in fsa_hash: -N did not work correctly.
+- fsa_visual uses manhattan edges.
+- Introduced a new compile option STOPBIT that changes the format
+  version, and makes automata smaller (by nearly 20% for large
+  automata).
+- Included more information on data preparation in README, and on
+  compile options in INSTALL.
+- Compiled the package on Solaris using g++ 2.6.0 to improve
+  portability (thanks Sabine).
+Version 0.15:
+- Corrected a bug in list.empty_list - a memory leak that could be a nuisance
+  with fsa_prefix operationg on large data.
+- Corrected perl scripts.
+- Added new script: morph_infix.{awk,pl}. It prepares data for an automaton
+  to be used with fsa_morph for languages that have prefixes and infixes
+  (like German).
+- Added new compile option: MORPH_INFIX, and two new runtime options for
+  fsa_morph: -I and -P. They make it possible to use data prepared with
+  morph_infix.{awk,pl}.
+- Added new compile option: POOR_MORPH that enables -A option in
+  fsa_morph. That option enables morphological analysis giving only
+  categories, and no base form.
+- Added new script: morph_prefix.{awk.pl}. It prepares data for an automaton
+  to be used with fsa_morph for languages that have prefixes (like Polish).
+Version 0.16:
+- Corrected a memory leak bug in fsa_morph. Now fsa_morph works two orders 
+  of magnitude faster.
+- Corrected manual pages (format errors).
+Version 0.17:
+- Added new compile option for fsa_build and fsa_ubuild:
+  DESCENDING. If on, makes resulting automata smaller, but slower.
+- Improved morph_infix.{awk,pl}.
+- New option -F added to fsa_build and fsa_ubuild. It sets the filler
+  character.
+- New scripts added: prep_ati.{awk,pl}. They prepare data with coded infixes
+  and prefixes for guessing lexemes and categories using fsa_guess.
+- New scripts added: prep_atp.{awk,pl}. They prepare data with coded prefixes
+  for guessing lexemes and categories using fsa_guess.
+- fsa_hash now works correctly with the STOPBIT option.
+- corrected another bug in fsa_hash, which probably lingered there
+  from the beginning, and which made fsa_hash unusable for more than
+  256 words.
+Version 0.18:
+- Added new compile option MORE_COMPR that tries to get more compression
+  when using fsa_build or fsa_ubuild compiled with NEXTBIT.
+Version 0.19:
+- Added new compile option TAILS that enables compression of tails
+  (last transitions) of states.
+- Now MORE_COMPR also tries to squeeze some bytes without NEXTBIT.
+- Corrected a bug in Makefile introduced in 0.18 (one comment too
+  many).
+- Enriched documentation on options in INSTALL.
+- Corrected a bug in fsa_visual that showed up with variable size
+  arcs, i.e. NEXTBIT or TAILS.
+- Added a check on whether -O option should be used in fsa_visual and
+  supply it when necessary even when the user doesn't do that.
+- Added LOOSING_RPM compile option to circumvent a bug in g++ or
+  stdlibc++ found in new rpms (I have to use SuSE now, and I got
+  reports of the same bugs appearing on Red Hat, but no problems on
+  Debian). This does not solve all the problems - if they appear,
+  switch optimization off (remove -O2 from compile options).
+- Added a small program fsa_dump. It is not in Makefile, as it is not
+  tested yet. The source is in dump.cc. The program lists the contents
+  of an automaton as transitions.
+- Added scripts: de_morph_data.{awk,pl} and de_morph_infix.{awk,pl}
+  that produce the 3 column format out of data for fsa_build.
+- Added scripts: demorph.{awk,pl} that produce the 3 column format from
+  the output of fsa_morph.
+Version 0.20
+- Moved mark_inner() to nnode.cc, as it can be used without A_TERGO option.
+- Added an info on producing the contents of an automaton.
+- Fixed display of statistics for NEXTBIT and TAILS
+- Corrected placement of conditionals so that compilation without
+  FLEXIBLE is possible. But do use FLEXIBLE!
+- Added a Tcl script - an interface for fsa_guess as a tool for
+  acquisition of descriptions for a morphological dictionary.
+- Added additional information to -v option of all programs.
+- MORE_COMPR is now *much* faster; actually, it became usable.
+- Added a new perl script chkmorph.pl that removes those predictions
+  made by fsa_guess that cannot produce the required flectional form.
+- Added sortatt.pl perl script that sorts words on their
+  categories/features; it is used by the tcl/tk interface, and it is
+  specially useful when comparing output of two descriptions.
+- added gendata.pl - a perl script that generates data for guessing
+  morphological descriptions in mmorph format of unknown words.
+Version 0.21
+- Corrected some bugs in gendata.pl.
+- Added new compile option - WEIGHTED.
+- Corrected a bug in chkmorph.pl.
+- Corrected a bug in fsa_ubuild (thanks to Christen Blom - Dahl)
+- Totally rewritten GENERALIZE. I hope it provides better results.
+- Added new script sortondesc.pl that sorts morphological descriptions
+  of words so that the most probable come first. A description is
+  judged to be more probable when it appears in more words.
+- Corrected a horrible bug in fsa_spell that manifested itself when
+  the edit distance was set to 0. Program gave arbitrary results.
+- Tcl/Tk interface for lexical acquisition is now much more powerful.
+- Added a new script putinplace.pl that should put descriptions chosen
+  with the Tcl/Tk tool in their appropriate places.
+Version 0.22
+- Corrected conditional compilation so that it is now possible to
+  compile without MORE_COMPR.
+- Added guided correction (right mouse button on description) to the
+  dictionary acquisition tool. The interface is improved.
+- Added statistics to the dictionary acquisition interface.
+Version 0.23
+- In the Tcl/Tk tool, corrected output from mmorph matching so that if
+  all values of a feature are generated, nothing comes out, and when
+  no features are generated, the feature name is deleted from the
+  output.
+- In the Tcl/Tk tool, corrected deleting features using the right mouse
+  button menu.
+- Corrected the script chkmorph.pl so that no phony item appears at
+  the end (there is no dangling comma at the end).
+- Added a new option to ignore the filler character in morphology.
+- Corrected building a weighted guessing automaton. It still needs my
+  attention.
+Version 0.24
+- Corrected dropping one hypothesis in sortondesc.pl script.
+- Corrected a bug in fsa_build that make pointer size calculation invalid
+  (thanks to Gertjan van Noord).
+- Corrected a bug in fsa_spell for distances greater than 1 (thanks to
+  Jiri Andel).
+Version 0.25
+- Included perl and tcl scripts in installation in Makefile.
+- Corrected a bug in fsa_hash: null pointers were followed in word->number
+  conversion (thanks to Martin Povolny).
+Version 0.26
+- Included perl and tcl scripts deleted by mistake from 0.25.
+- Corrected Makefile so that it does not delete perl and tcl scripts
+  in make realclean.
+Version 0.27
+- Corrected a bug in Undo operation in Tcl/Tk interface.
+- Moved customization of tclmacq to Makefile.
+- Adapted tclmacq to new version of Tcl/Tk.
+Version 0.28
+- Corrected a bug in tclmacq (Tcl/Tk interface for dictionary
+  acquisition). Sorting was done before (and not after) expansion of
+  alternatives, which resulted in apparently random order.
+- Added some include directives needed in the most recent compilers
+  (thanks to Dawid Weiss).
+- Corrected setting the FILLER character in builds_fsa.cc (thanks to
+  Dawid Weiss).
+- Corrected usage info for dump.cc (thanks to Dawid Weiss).
+Version 0.29
+- Corrected a bug in simplify.pl (it produced duplicates).
+Version 0.30
+- Corrected a bug in fsa_morph. When one entry was a prefix of another
+  entry, the words were the same, but one annotation was shorter then
+  the other one, the longer entry was not printed (thanks to Gertjan
+  van Noord).
+Version 0.31
+- Corrected the use of one variable so that the package compiles with
+  the old set of options (thanks to Michael Daum).
+Version 0.32
+- The package now compiles under g++ 3.1.1.
+Version 0.33
+- jguess is again produced (thanks to Leonoor van der Beek)
+- Corrected fsa_hash so that words not in the dictionary return -1
+  and not a slash (thanks to Vinay Middha).
+- Added a file TROUBLESHOOTING describing the most common problems people have
+  while trying to install and use the package. As a bonus, I included some
+  solutions as well.
+- Added possibility of morphological analysis of words without tags, i.e.
+  stemming or lemmatization (thanks to Gertjan van Noord). Just remove
+  the last annotation separator (+) and anything that follows it from
+  the output of a script preparing morphological data.
+Version 0.34
+- States can have up to 255 (was: 127) outgoing transitions when
+  compiled with STOPBIT (thanks to Gertjan van Noord).
+- Closed memory leaks in handling of lists (thanks to Martin Povolny).
+Version 0.35
+- Corrected a bug introduced in the previous version (deleting the
+  wrong thing).
+Version 0.36
+- Corrected a bug in dynamic growth of strings read from input in
+  programs that use automata, i.e. not fsa_build nor fsa_ubuild
+  (thanks to Gertjan van Noord).
+Version 0.37
+- Replaced recursion with iteration in some programs, e.g. fsa_hash.
+  fsa_hash is now about 3.5 percent faster.
+Version 0.38
+- Introduced a "-a" runtime option to list the contents of the whole
+  dictionary. The updated glibc++ version I have now treats reading an
+  empty line as an error, so there is no way to learn if an empty line
+  was indeed read.
+- Introduced a new compile option DUMP_ALL to supress printing the
+  leading space in fsa_prefix.
+- Corrected some type errors and vestiges of previous versions when
+  using DEBUG compile option (thanks to Nikolay Ketsaris).
+- Corrected dump.cc to print non-ASCII characters.
+Version 0.39
+- fsa_spell now compiles also without CHCLASS (thanks to Nikolay Ketsaris).
+- Added ios::binary in 3 places for the benefit of those who have the
+  misfortune of being forces to use the virus distribution system from
+  M$.
+- Corrected exit code in fsa_prefix when -a is used (thanks to Marcin
+  Mi³kowski)
+- Corrected a bug in fsa_build and fsa_ubuild when -O was
+  used. Certain states were compressed "too much", i.e. comparison of
+  transitions did not work in part_cmp_nodes due to a modification
+  introduced several versions ago.
+- Changed the script ie1 to make it immediately useful for debugging
+  should anything unpredictable happen.
+- Removed the outrageously outdated file ToDo.
+Version 0.40
+- Corrected a bug in the initialization of the H_matrix in fsa_spell
+  (thanks to Guillaume Rousse).
+- Corrected a bug in ie1 (return value for fgrep)
+- Changed the way parameters are passed to most functions in programs
+  that use automata (passing first arc instead of the parent arc).
+  This might have introduced some new errors...
+- Added a parameter to fsa_spell to force the search for replacements
+  (thanks to Guillaume Rousse).
+- Added two new compile options. The first one -- SPARSE -- changes
+  the way the automaton is represented. if the option is used, then
+  most of transitions of the automaton are stored as a sparse
+  matrix. Only annotations (e.g. in morphological dictionaries) are
+  still stored as lists of transitions. The new representation is
+  faster for most tasks, but it takes longer to produce, and it is
+  larger. The option SLOW_SPARSE makes sure that we try to fill in
+  every hole in the sparse matrix, but it results in *VERY* slow
+  construction, and the results are practically the same.
+Version 0.41
+- Corrected a bug in fsa_ubuild that caused the FILLER not to be set (thanks
+  to Marco Baroni)
+Version 0.42
+- Corrected a compile error in mmorph.cc when MORPH_INFIX was undefined.
+- Corrected an error in fsa_prefix that gave infinite loops while
+  listing words with certain prefixes.
+- Corrected a bug that resulted from new glibc++ I/O behaviour (thanks
+  to Gertjan van Noord)
+- Changed the licence so that the package is freer than it used to be.
+Version 0.43
+- Corrected a bug in fsa_morph that never got a chance to manifest
+  itself there because of the way C++ initializes variables, but it
+  was a bug anyway (thanks to Jirka Mikulasek).
+Version 0.44
+- Corrected a bug in fsa_morph that was introduced in version 0.40 and
+  resulted in inability to process infixes (thanks to Marcin Milkowski).
+- Corrected a bug in fsa_guess that was introduced in version 0.40 and
+  resulted in inability to process infixes (thanks to Marcin Milkowski).
+Version 0.45
+- Corrected a bug in counting transitions with the next flag set that
+  resulted in incorrect pointer size in fsa_build/fsa_ubuild (thanks
+  to Marcin Milkowski and Dawid Weiss).
+Version 0.46
+- Corrected a bug in pruning arcs (transitions) for guessing automata in
+  fsa_build/fsa_ubuild (thanks to Marcin Milkowski).
+Version 0.47
+- Corrected a bug in pruning arcs (transitions) for guessing automata in
+  fsa_build/fsa_ubuild (thanks to Marcin Milkowski).
+- fsa_ubuild calls now the same functions as fsa_build when building guessing 
+  automata.
+Version 0.48
+- Corrected a few bugs in memory management in fsa_build and fsa_ubuild when
+  pruning arcs (transitions) for guessing automata (thanks to Marcin
+  Milkowski).
+- Updated README to include LANG=C in examples invoking sort, so that the way
+  to make sort behave correctly is shown.
+Version 0.49
+- Corrected a bug in construction of guessing automata, in which the
+  same annotation appeared twice. 
+- Corrected a bug in construction of guessing automata, in which no
+  annotation separator character was used in certain paths.
+- Added an include directive to make the package compile with gcc 4.3 (thanks
+  to Milos Jakubicek).
+Version 0.50
+- Added perl scripts prep_gen.pl, prep_genp.pl, and prep_geni.pl for
+  preparation of data for morphological generation (synthesis).
+- Added comments to morph_data.pl, morph_prefix.pl, and morph_infix.pl.
+- Added man pages fsa_synth.1 and fsa_synth.5.
+- Added files synth.h, synth.cc, and synth_main.cc that compile to
+  give fsa_synth - a program for morphological generation. Also
+  adjusted Makefile.
+- Added new compile option UTF8. The package worked with unicode even
+  without it, except for case conversion, fsa_accent, and
+  fsa_spell. It may be needed by fsa_synth when regular expressions
+  are used, and they contain characters that take more than one byte
+  in UTF8. While fsa_accent now works with unicode (with some
+  limitations), fsa_spell still does not word with UTF8.
+Version 0.51
+- Corrected handling of long lines in programs that use automata. Stroustrup
+  just forgot to mention that one needs to call clear() for an input stream
+  when the entire line did not fit the buffer length (thanks to Gertjan van
+  Noord). Introduced detection of non-hash dictionaries with fsa_hash.

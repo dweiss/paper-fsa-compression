@@ -1,0 +1,829 @@
+1. COMPILATION
+
+1.1. General
+
+  All programs are written in C++. You need a C++ compiler to compile them.
+  I have used GNU g++ 2.6.0 under SunOS 4.1.4, and later under
+  Solaris. This version was compiled with g++ 2.7.2.1. Previous versions
+  may have problems with templates. I had problems compiling this
+  version with Solaris CC - again, templates were to blame.
+
+  If you work under Unix, and you have a g++ compiler, a simple command:
+
+  make
+
+  should work. If you use a different compiler, append CXX=that_compiler to
+  the command line, e.g.:
+
+  make CXX=CC
+
+  If you use another operating system, and a different compiler, you should
+  have manuals for them. Consult them. Under the infamous so called
+  operating system from Microsoft, you should consider adding
+  ios::binary to the declaration of fstream dict(...) in file common.cc.
+
+  Note that emacs lisp package works with emacs 19.34, and it will
+  almost certainly not work with emacs 20.
+
+1.2. Compile options
+
+  Before you jump to experiment with various options, or jump out
+  of the window on seeing how many options there are, please note
+  that a default set of them is provided in the Makefile, so do not worry.
+
+  Please note that you can see what options were used for compiling
+  a particular program by invoking it with -v option. When you change
+  compile options and recompile the programs, please do "make clean" first
+  - it may save you a lot of troubles.
+
+  There are some compile options that may be worth trying. First,
+  normal optimization for speed (done by the compiler):
+
+  CPPFLAGS=-O
+  or
+  CPPFLAGS=-O2
+
+  Then there are options used for conditional compilation of the source
+  code. They are specified in CFLAGS with -D, i.e. use e.g.
+
+  make CPPFLAGS=-DJOIN_PAIRS
+
+  to compile the programs with JOIN_PAIRS option on. To specify more
+  options, put them into quotes, e.g.:
+
+  make CPPFLAGS='-DA_TERGO -DSORT_ON_FREQ'
+
+  Be careful when specifying MORE_COMPR. The construction time may
+  rise dramatically when you use -O run-time option of fsa_build or
+  fsa_ubuild. That time is spent not on construction itself, but
+  rather on reordering the arcs, and trying to match them.
+
+  In the following descriptions, the following fileds are used:
+  Assumes: those options must be defined.
+  Excludes: those options cannot be defined.
+  Used in: this option is given to programs in the list.
+  Affects: this option changes the output of programs in the list.
+
+1.2.1. Options changing format version number
+
+  In the present version, there are 6 numbered format versions: 0, 1, 2
+  4, 5, and 128 (or -127, or 0x80). For differences between these formats
+  see file fsa.h. The formats correspond to different settings of the
+  following compile options: LARGE_DICTIONARIES, FLEXIBLE, STOPBIT, NEXTBIT,
+  TAILS, SPARSE. In the following table, LARGE_DICTIONARIES appears as L_D.
+
+  	L_D	FLEXIBLE	STOPBIT	NEXTBIT	    TAILS   WEIGHTED	SPARSE
+  0:	-	-		-	-	    -	    -		-
+  1:	-	+		-	-	    -	    -		-
+  2:	-	+		-	+	    -	    -		-
+  4:	-	+		+	-	    -	    -		-
+  5:	-	+		+	+	    -	    -		-
+  6:	-	+		+	-	    +	    -		-
+  7:	-	+		+	+	    +	    -		-
+  8:	-	+		+	+	    -	    +		-
+  9:	-	+		+	-	    -	    -		+
+  10:	-	+		+	+	    -	    -		+
+  11:	-	+		+	-	    +	    -		+
+  12:	-	+		+	+	    +	    -		+
+  128:	+	-		-	-	    -	    -		-
+
+  Note that in order to produce an automaton in format version 8, -W
+  runtime option must be given to fsa_build or fsa_ubuild. Otherwise
+  version 5 will be produced.
+
+
+  FLEXIBLE
+  makes it possible to produce dictionaries (automata) tailored to
+  particular needs. The size of arcs is determined dynamically. This
+  should be on, as the old way gives (usually) bigger
+  dictionaries. This option also makes the automata portable - another
+  reason for using it. I may remove inflexible code from the future
+  versions of this package.
+  Assumes: no options.
+  Excludes: LARGE_DICTIONARIES.
+  Used in: all programs.
+  Affects: fsa_build, fsa_ubuild.
+  When to use: always.
+
+  LARGE_DICTIONARIES
+  This is an old option to be used without FLEXIBLE when the automaton
+  gets too big. Note that FLEXIBLE makes it possible to produce
+  dictionaries of any size while making them as small as possible, so
+  you do not need this LARGE_DICTIONARIES. I am not sure whether it
+  still works.
+  Assumes: no options.
+  Excludes: FLEXIBLE, STOPBIT, NEXTBIT, NUMBERS.
+  Used in: all programs.
+  Affects: fsa_build, fsa_ubuild.
+  When to use: never.
+
+  NEXTBIT
+  introduces a 1b flag that is set when the target of the arc
+  is placed right after the current one in the automaton, and cleared
+  otherwise. Otherwise the bit is not set. In case the flag is set,
+  the go_to field, i.e. the address of the node to which this arc
+  points, is dropped - only the (1 byte) part than contains
+  the flag is kept. This usually produces smaller automata, as there
+  are frequently chains of nodes one following another, and for the
+  arcs of those nodes it is not necessary to store the whole addresses
+  of the next nodes in those chains. However, since the nodes are no
+  longer fixed size, and we have additional 1b flag that takes place
+  in the go_to field, the size of the resulting automaton may actually
+  be higher when the additional 2-3 bytes cross the byte boundary in
+  the go_to field. Also note that in order to increase the
+  compression, the numbering scheme is different from the usual one in
+  that it starts numbering the children from the last arc. This is
+  done in order to have more nodes lying just after the arc that
+  points to them.
+  Assumes: FLEXIBLE.
+  Excludes: LARGE_DICTIONARIES, JOIN_PAIRS.
+  Used in: all programs.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix.
+  When to use: always.
+
+  STOPBIT
+  replaces counters that hold the number of arcs for each node with
+  one bit for each arc that says whether it is the last one in the
+  node. This gives smaller automata, although maybe a fraction of a
+  percent slower. Note that while automata produced with this option
+  are never larger than those produced without it, for some automata,
+  the size does not change. The reason is that 1-bit markers have to
+  find room in the goto bytes, and they may provoke crossing the byte
+  barrier.
+  Assumes: FLEXIBLE.
+  Excludes: LARGE_DICTIONARIES, JOIN_PAIRS.
+  Used in: all programs.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix.
+  When to use: always.
+
+  TAILS
+  introduces a 1b flag that is set for a particular node when the tail
+  of that node (i.e. a number of arcs that are the last arcs of the
+  node) matches the tail of another node somewhere else in the
+  automaton. If the byte is set, then the present arc is followed by
+  the address of the isomorphic tail in another node in the
+  automaton. For example, if we have node A with arcs (a, c, d) (we
+  skip the addresses, and markers of finality for brevity), and a node
+  B with arcs (b, c, d), then in node B, we can have only an arc with
+  b, and a pointer to (c, d) from A. The arc b in B has the flag
+  set. Or we can do that the other way round, i.e. node A may contain
+  only arc a with the flag set, and the node B is written in
+  whole. Note that the flag takes space in the goto field, so it may
+  leed to increase in space. However, it should normally produce
+  smaller automata. It always leeds to bigger construction times.
+  Assumes: FLEXIBLE, STOPBIT.
+  Excludes: LARGE_DICTIONARIES, JOIN_PAIRS.
+  Used in: all programs.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix.
+  When to use: for static dictionaries after testing (for certain
+               sizes the automata can actually be bigger).
+
+  WEIGHTED
+  introduces weights in every arc. The weights are proportional to the
+  number of strings recognized in the part of the automaton reachable
+  via that arc. Weights take only one byte, so if the number of
+  strings is too large to fit into one byte, the weights on all arcs
+  of the parent node are descreased proportinally. This option
+  requires more memory during construction process, and automata are
+  larger (they may even contain multiple copies of isomorphic nodes,
+  but with different weights). However, this option makes it possible
+  to introduce probabilities to fsa_guess.
+  Assumes: FLEXIBLE, STOPBIT, NEXTBIT, A_TERGO.
+  Excludes: LARGE_DICTIONARIES, JOIN_PAIRS.
+  Used in: all_programs.
+  Affects: fsa_build, fsa_ubuild, fsa_guess.
+  When to use: for adding new words to a morphological dictionary, for tagging.
+
+  SPARSE
+  introduces sparse matrix representation. If there is no annotation
+  separator in the strings, the entire automaton is stored using it
+  (except for some dummy data). If there are annotations, they are
+  stored in the traditional format (list of transitions). This option
+  gives fast recognition times, fast word to number
+  conversion (perfect hashing), but larger dictionaries, slow listing
+  of contents, slow number to word conversion, and slow search for
+  candidates in spelling correction, slow guessing, slow construction.
+  Assumes: FLEXIBLE, STOPBIT
+  Excludes: LARGE_DICTIONARIES, JOIN_PAIRS, WEIGHTED
+  Used in: all programs.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix.
+  When to use: When the programs should be optimized for speed rather
+               than for size, number to word conversion speed is not
+	       critical to the system, and spelling correction is
+	       called mostly on correct words. See file `Times' for
+	       results of my experiments.
+
+1.2.2. Options changing format without changing format version number
+
+  NUMBERS
+  makes it possible to build automata that have word numbering
+  information in them, and to use them. That information is used by
+  fsa_hash. To build automata that have the numbering information in
+  them, use -N option of fsa_build. Note that when using -N, its is
+  not arcs, but bytes that are addressable, so we need 2 or usually 3
+  bits more for the goto field. This in turn may be translated into
+  increasing the arc size by one byte. Even when we have room for
+  those additional bits in the current byte frame, note that the
+  numbering information also takes place (as many bytes as it takes to
+  number all words stored in the automaton). You cannot use
+  compression (runtime option -O) with -N.
+  Assumes: FLEXIBLE.
+  Excludes: LARGE_DICTIONARIES.
+  Used in: all programs.
+  Affects: fsa_build, fsa_ubuild, fsa_hash, fsa_prefix.
+  When to use: if you use perfect hashing.
+
+1.2.3. Options changing the size of the automaton without changing the format
+
+  DESCENDING
+  makes the resulting automaton built with -O a bit smaller, but much slower.
+  Assumes: SORT_ON_FREQ.
+  Excludes: No options.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix, fsa_hash.
+  When to use: If you want a bit smaller but a bit slower to use automata.
+
+  JOIN_PAIRS
+  makes the resulting automaton smaller if you use fsa_build with "-O"
+  (the option of fsa_build, or fsa_ubuild, not the compiler). It works
+  by sharing one arc by two two-arc nodes, where possible.
+  Assumes: No options.
+  Excludes: STOPBIT, NEXTBIT.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix, fsa_hash.
+  When to use: never.
+
+  MORE_COMPR
+  changes the order of arcs to get more compression. Requires more
+  memory. With -O, the execution time is much, much longer.
+  Assumes: NEXTBIT or STOPBIT.
+  Excludes: No options.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix, fsa_hash.
+  When to use: for static dictionaries.
+
+  SORT_ON_FREQ
+  makes the the automaton smaller (independently of JOIN_PAIRS). It
+  works by sorting the arcs on frequency. Note that this changes the
+  order of words in the automaton. If DESCENDING not set, can make the
+  resulting automaton built with -O faster.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild, fsa_prefix, fsa_hash.
+  When to use: always except for cases when you build something huge in
+               real time.
+
+1.2.4. Option affecting the way guessing automata (index a tergo) are built.
+
+  A_TERGO
+  enables -X option in fsa_build. This creates an index a tergo (a
+  guessing automaton).
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild, fsa_guess.
+  When to use: if you use fsa_guess.
+
+  GENERALIZE
+  In fsa_build called with -X option, reduces the size of the automaton
+  while loosing the advantage of always annotating correctly words that
+  are already in the dictionary. This options makes the automaton
+  smaller than PRUNE_ARCS.
+  Assumes: A_TERGO.
+  Excludes: PRUNE_ARCS.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild, fsa_guess.
+  When to use: if you use fsa_guess for adding new words to a dictionary.
+
+  PRUNE_ARCS
+  launches additional pruning during guessing automaton (index a
+  tergo) creation. The resulting automaton will be smaller, and
+  predictions narrower (maybe more precise, but those less probable
+  may be missing). Automata produced with this option are larger than
+  with GENERALIZE.
+  Assumes: A_TERGO.
+  Excludes: GENERALIZE.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild, fsa_guess.
+  When to use: if you use fsa_guess for tagging.
+
+1.2.5. Options affecting the way guessing automata are interpreted
+
+  GUESS_LEXEMES
+  makes fsa_guess tries to guess not only categories, but lexemes as
+  well. The data must be prepared differently (see man pages for
+  fsa_build and fsa_guess). Run-time option -g switches off guessing
+  lexemes.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_guess.
+  Affects: fsa_guess.
+  When to use: if you use fsa_guess for more tasks than tagging.
+
+  GUESS_MMORPH
+  makes it possible to use -m option in fsa_guess, i.e. prediction of
+  mmorph descriptions. mmorph is a morphology program developed at
+  ISSCO, Geneva.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_guess.
+  Affects: fsa_guess.
+  When to use: for using fsa_guess in acquisition of new words for a
+	       morphological dictionary.
+
+  GUESS_PREFIX
+  makes fsa_guess use information about prefixes to disambiguate
+  morphological parses. Requires GUESS_LEXEMES. Data must be prepared
+  differently (see man pages for fsa_build and fsa_guess). Reduces the
+  size of the a tergo dictionary compared with that created to be used
+  with GUESS_LEXEMES only. Run-time option -p switches off the use of
+  prefixes in guessing.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_guess.
+  Affects: fsa_guess.
+  When to use: when you use fsa_guess, and the language you are
+	       working on has prefixes or infixes.
+
+1.2.6. Options changing the way morphological automata are interpreted
+
+  MORPH_INFIX
+  makes it possible to use -P and -I options that interpret coded
+  prefixes (-P), and coded prefixes and infixes (-I) in fsa_morph.
+  For more details, see README file, and the man page for fsa_morph(5).
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_morph.
+  Affects: fsa_morph.
+  When to use: when you use fsa_morph, and the language you are
+	       working on has prefixes or infixes.
+
+  POOR_MORPH
+  makes it possible to use -A option, so that the automata can contain
+  only information about categories, and no information about the base
+  form of an inflected form.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_morph.
+  Affects: fsa_morph.
+  When to use: if you use fsa_morph only for tagging.
+
+1.2.7. Various options.
+
+  CASECONV
+  works with fsa_spell. It makes it possible to check capitalized words
+  as if they were all lowercase.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_accent, fsa_morph, fsa_spell.
+  Affects: fsa_accent, fsa_morph, fsa_spell.
+  When to use: when case conversion is needed.
+
+  CHCLASS
+  makes it possible to treat certain two-letter sequences in certain
+  context as if they were single letters. This is useful in
+  spelling. E.g. in Polish, `rz' and `z' with a dot above (\.z in TeX)
+  are pronounced in exactly the same way, so they may be confused. This
+  option makes it possible to treat such replacements as if they were
+  one edit distance unit apart from each other. This option is used in
+  fsa_spell.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_spell.
+  Affects: fsa_spell.
+  When to use: for spelling correction in languages for which edit
+	       distance one is not sufficient.
+
+  DEBUG
+  If you have a few spare months, you can compile the programs with
+  CFLAGS=-DDEBUG. That will give huge amounts of information about program
+  internals during execution time. It may also give compile errors. In
+  debugging the program, I just comment out particular ifdefs.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: all programs.
+  Affects: all programs.
+  When to use: never.
+
+  DUMP_ALL
+  works with fsa_prefix. If you compile the program with this option,
+  no space will be prepended to listed entries. In particular, this
+  can list the contents of the dictionary without the need to remove
+  the leading space. Use -a run-time option to list the contents.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_prefix.
+  Affects: fsa_prefix.
+  When to use: to list the contents of a dictionary.
+
+  LOOSING_RPM
+  makes it possible to use the programs even on linux distributions
+  using rpms. The libstdc++ distributed with RedHat and SuSE has
+  broken I/O. You probably do need to use that option with more stable
+  distributions. This option does not fix the -O2 problem,
+  however. You will still have to use -O only.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: all programs.
+  Affects: all programs.
+  When to use: with corrupted versions og libg++, e.g. Red Hat and SuSE.
+
+  PROGRESS
+  In fsa_build, shows how many lines have been read so far, and what is
+  being done at the moment, i.e. what phase the processing is in.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild.
+  When to use: when you build something huge and you are not sure if
+	       it works.
+
+  RUNON_WORDS
+  makes it possible to check whether inserting a space inside the
+  checked word produces two correct words. This works with fsa_spell.
+  Assumes: no options.
+  Excludes: no options.
+  Used in: fsa_spell.
+  Affects: fsa_spell.
+  When to use: for spellchecking.
+
+  SHOW_FILLERS
+  enables printing of filler characters by fsa_prefix (they are normally
+  not printed).
+  Assumes: no option.
+  Excludes: no option.
+  Used in: fsa_prefix.
+  Affects: fsa_prefix.
+  When to use: for diagnostics.
+
+  SLOW_SPARSE
+  checks for every hole in a sparse matrix whether it can still be filled,
+  which could lead to smaller automata. This slows down construction
+  process for large automata by orders of magnitude.
+  Assumes: FLEXIBLE, STOPBIT, SPARSE.
+  Excludes: WEIGHTED, LARGE_DICTIONARIES.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild.
+  When to use: If you think you waist too many transitions in a sparse
+	       matrix in small automata.
+
+  STATISTICS
+  In fsa_build, shows some statistics on the resulting automaton: the
+  number of states, transitions, etc.
+  Assumes: no option.
+  Excludes: no option.
+  Used in: fsa_build, fsa_ubuild.
+  Affects: fsa_build, fsa_ubuild.
+  When to use: when you are interested in properties of automata.
+
+  UTF8
+  In fsa_synth, enables UTF8 coding to be used in both the
+  dictionaries, and the input, namely regular expressions that specify
+  tags. UTF8 coding can be used even without that option with some
+  limitations: it cannot be used in regular expressions with
+  fsa_synth, case conversion (CASECONV option) might not work,
+  fsa_spell might give strange, incorrect results. Note that the dictionaries,
+  language files, accent files etc. all need to be in UTF8.
+  Assumes: no option.
+  Excludes: no option.
+  Used in: all programs except for fsa_build and fsa_ubuild.
+  Affects: all programs except for fsa_build and fsa_ubuild.
+  When to use: when your automata for morphological generation (and
+  input) have to be in Unicode, including tags, and tags need to be
+  specified as regular expressions. Don't use with fsa_spell (for
+  now). With fsa_accent, do not use SPARSE when characters without
+  diacritics are not latin letters (for now).
+
+2. CONSTANTS
+
+  Max_word_len
+  Defined in: common.h
+  Default value: 120.
+  Affects: All programs except fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Must be positive.
+
+  LIST_INIT_SIZE
+  Defined in: common.h
+  Default value: 16.
+  Affects: All programs except fsa_build and fsa_ubuild.
+  Description: Initial size of a list, e.g. list of replacements, list
+	       of dictionary names etc. The bigger, the faster.
+  Restrictions: Must be positive.
+
+  LIST_STEP_SIZE
+  Defined in: common.h
+  Default value: 8.
+  Affects: All programs except fsa_build and fsa_ubuild.
+  Description: If a list grows beyond LIST_INIT_SIZE, its size is
+	       increased by this value. The bigger, the faster.
+  Restrictions: Must be positive.
+
+  MAX_ARCS_PER_NODE
+  Defined in: fsa.h
+  Default value: 255 or 128, depending on compile options.
+  Affects: All programs.
+  Description: Maximal number of outgoing transitions per state. Do
+	       not change.
+  Restrictions: Depends on the structure of states and transitions. Do
+		not change.
+
+  MAX_NOT_CYCLE
+  Defined in: common.h
+  Default value: 1024.
+  Affects:
+  Description: Maximal length of a string in the automaton. It is used
+	       to detect errors.
+  Restrictions: Must be positive.
+
+  MAX_VANITY_LEVEL
+  Defined in: guess.h
+  Default value: 5.
+  Affects: fsa_guess.
+  Description:
+  Restrictions:
+
+  PAIR_REG_LEN
+  Defined in: nindex.h
+  Default value: 32.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  MAX_SPARSE_WAIT
+  Defined in: nnode.h
+  Default value: 3.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  Max_edit_distance
+  Defined in: spell.h
+  Default value: 3.
+  Affects: fsa_spell.
+  Description:
+  Restrictions:
+
+  WORD_BUFFER_LENGTH
+  Defined in: build_fsa.cc
+  Default_value: 128.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  UNREDUCIBLE
+  Defined in: mkindex.cc
+  Default value: 4.
+  Affects:
+  Description:
+  Restrictions:
+
+  WITH_ANNOT
+  Defined in: mkindex.cc
+  Default value: 2.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Do not change.
+
+  NO_ANNOT
+  Defined in: mkindex.cc
+  Default_value: 1.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Do not change.
+
+  NODE_TO_BE_REDUCED
+  Defined in: mkindex.cc
+  Default value: -5.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Do not change.
+
+  NODE_UNREDUCIBLE
+  Defined in: mkindex.cc
+  Default value: -6.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Do not change.
+
+  NODE_IN_TAGS
+  Defined in: mkindex.cc
+  Default value: -7.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Do not change.
+
+  NODE_MERGED
+  Defined in: mkindex.cc
+  Default value: -8.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Do not change.
+
+  NODE_TO_BE_MERGED
+  Defined in: mkindex.cc
+  Default value: -9.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions: Do not change.
+
+  MIN_PRUNE
+  Defined in: mkindex.cc
+  Default value: 2.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  MAX_DESTS
+  Defined in: mkindex.cc
+  Default value: 32.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  MIN_DESTS_MEMBERS
+  Defined in: mkindex.cc
+  Default value: 0.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  MAX_ANNOTS
+  Defined in: mkindex.cc
+  Default value: 20.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  MAX_DIFF_ANNOTS
+  Defined in: mkindex.cc
+  Default value: 20.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  MIN_KIDS_TO_MERGE
+  Defined in: mkindex.cc
+  Default value: 2.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  MIN_ANNOTS
+  Defined in: mkindex.cc
+  Default value: 3.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  AN_NOM
+  Defined in: mkindex.cc
+  Default value: 1.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  AN_DENOM
+  Defined in: mkindex.cc
+  Default value: 2.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+  INDEX_SIZE_STEP
+  Defined in: nindex.cc and nnode.cc.
+  Default value: 16.
+  Affects: fsa_build and fsa_ubuild.
+  Description:
+  Restrictions:
+
+
+3. INSTALLATION
+
+  Copy all dictionaries you want to be installed into the source dictionary
+  of the package. Dictionaries are provided separately, so make sure you
+  have copied them (at least those you may need). Note that the
+  dictionaries on http://www.pg.gda.pl/~jandac/fsa.html have been
+  prepared long time ago using only those options that were available
+  at that time. If you want to use them, compile the program as you
+  like, try to use the dictionaries, and you will probably get an
+  error message saying what compile options were used for compilation
+  of fsa_build that constructed the dictionaries. Save Makefile,
+  delete some options from it, make clean, make, use fsa_prefix to get
+  the contents, restore Makefile, make clean, make, and build the
+  automata again (they should be much smaller with the default set of
+  options for the current version).
+
+3.1. Admin part
+
+  For Polish users, you may look at pl.chcl file and uncomment some
+  lines, if too many users watch too much tv, and read too little.
+
+  There are a few variables in Makefile that you can change. These are
+  PREFIXDIR - parent dir of BINDIR, MANDIR, DICTDIR (default: /usr/local);
+  BINDIR    - where the programs should be placed (default: $PREFIXDIR/bin);
+  MANDIR    - where the man pages should be placed (default:
+	      $PREFIXDIR/man);
+  DICTDIR   - where dictionaries, accent files, language files, and
+	      character class files should be placed (default:
+	      $PREFIXDIR/lib);
+  LISPDIR   - where jspell.el should be placed. I think the site-lisp
+	      directory is better than lisp directory. Check your emacs
+	      version as it normally forms a part of that name.
+	      The directory specified in Makefile by default will
+	      probably not work for you;
+  TCLMACQDIR- where files supporting execution of the tcl/tk interface
+	      tclmacq should go (help file and language file);
+  TCLMACQBINDIR
+	    - where tcl scripts and perl scripts supporting tclmacq
+	      should go (it should be the same as BINDIR);
+  PREP_FCONF- It should be set to \# for Tcl versions prior to 8.2 (I
+	      think), and to nothing for 8.2 and higher. If man
+	      fconfigure shows -encoding option present, then the
+	      variable should be empty, otherwise it should be set to \#
+  MANSECT   - in which section of the manual the pages should be placed.
+
+  You can specify those variables on the command line, e.g.:
+
+  make installlisp LISPDIR=/utl/share/gnu/emacs/site-lisp
+
+  make install	       - installes everything,
+  make installbin      - installes the binaries without man pages,
+  make installman      - installes the manpages,
+  make installscripts  - installes interface scripts (jspell & jaccent),
+  make installlisp     - installes jspell.el (byte compile it afterward),
+  make installdicts    - installes dictionaries (if any), accent files,
+		         language files, character class files.
+
+  Note that with newer linux emacs distributions, the LISPDIR should
+  point to something like /etc/emacs/site-start.d, and the file names
+  should have a prefix `50'. If you put the jspell.el there, it will
+  be loaded automatically, so that you will not need (require 'jspell)
+  in your .emacs file.
+
+3.2. Admin or user part
+
+  The following commands can be put either in site-start.el file in
+  the site-lisp directory, or in users' .emacs files. The first method
+  makes the packet functions available to all users, and it should be
+  done by the administrator. The second method enables the functions
+  on a per-user basis. Note that emacs functions used to work with
+  emacs19, they will probably (almost certainly) not work with emacs20
+  and later versions.
+
+  ;; make functions known to emacs
+  (require 'jspell)
+
+  ;; install menus
+  (define-key-after
+    (lookup-key global-map [menu-bar edit])
+    [jspell] '("Jspell" .jspell-menu-map) 'ispell)
+
+  You may want to specify the default dictionary with e.g.:
+
+  (setq jspell-dictionary "polski")
+
+  You may want to compile additional dictionaries. Read the README
+  file and the man page for fsa_build. Remember to sort the data and
+  exclude duplicates (use sort -u) for fsa_build.
+
+  New perl and tcl/tk scripts: sortatt.pl and tclmacq.tcl require
+  setting some variables located at the top of those files.
+
+3.3. Mostly user part
+
+  The following variables can be changed by the user in their .emacs
+  file:
+
+  jmorph-format		- defines the format of morphotactic annotations
+			  (tags). It is an argument to format function
+			  (resembles C format in printf). It contains 3
+			  %s, corresponding to the inflected word,
+			  lexeme, and tag. The correspondence between
+			  those items and particular %s is given by the
+			  variable jmorph-order. Morphotactic
+			  annotations are added by jmorph-* functions.
+			  Example: (setq jmorph-format "%s_%s+%s").
+
+  jmorph-order		- defines the correspondance between the
+			  inflected word, lexeme, and annotations and %s
+			  in jmorph-format; in other words, it defines
+			  the order in which they appear as %s in
+			  jmorph-format. Example: (setq jmorph-order '(1
+			  2 3)).
+			  
+  jspell-morph-sep	- defines a separator character that separates a
+			  lexeme from annotations in the output from
+			  jmorph script. Example: (setq jspell-morph-sep
+			  "&")
+
+  jaccent-automatically	- accents are restored without asking the user
+			  for permission if there is only one choice.
+			  Example: (setq jaccent-automatically t)
+
+  jmorph-automatically	- morphotactic annotations are added without
+			  asking the user for permission if there is
+			  only one choice. Example: (setq
+			  jmorph-automatically nil).
+

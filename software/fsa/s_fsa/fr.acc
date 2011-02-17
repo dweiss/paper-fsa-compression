@@ -1,0 +1,31 @@
+# French diacritics.
+# Author: Jan Daciuk.
+#
+# The first character in this file is a comment character. It can be changed
+# without problems if the character used here (#) does not suit your needs.
+# Every line beginning with the comment character is not interpreted.
+#
+# In each data line, the first character is a latin character (i.e. without
+# diacritics). It is followed by one or more spaces, and then characters
+# that would be identical to the first character in the line if diacritics
+# were removed from them. There should be no spaces between those
+# characters.
+#
+# Every character is represented by itself, i.e. the file is binary.
+#
+#
+# lower case
+a âà
+c ç
+e éêèë
+i îï
+o ô
+u ûùü
+#
+# upper case
+A ÂÀ
+C Ç
+E ÉÊÈË
+I ÎÏ
+O Ô
+U ÛÙÜ

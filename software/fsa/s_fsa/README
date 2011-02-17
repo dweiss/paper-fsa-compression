@@ -1,0 +1,612 @@
+This distribution contains source code for programs for constructing finite
+state automata (fsa) from a list of words and for using them for
+spelling correction, diacritics restoration, perfect hashing, and morphology.
+
+Author: Jan Daciuk, jandac@eti.pg.gda.pl, http://www.eti.pg.gda.pl/~jandac/
+	Department of Knowledge Engineering
+	Technical University of Gdansk
+	Ul. Narutowicza 11/12
+	PL80-952 Gdansk-Wrzeszcz
+	POLAND
+	Tel. +(48)(58)347-26-89, fax +(48)(58)347-22-22.
+
+	These programs were developed during my stay at ISSCO,
+	University of Geneva, 54 route des Acacias, CH-1227 GENEVA,
+	Switzerland, Tel: +41/22/705 7933, Fax: +41/22/300 1086,
+	http://issco-www.unige.ch/ or http://www.issco.unige.ch/.
+
+	My staying in ISSCO was payed by the Swiss Federal Scholarship
+	Comission.
+
+	I use an algorithm for spelling correction taken from Kemal
+	Oflazer, "Error-tolerant Finite State Recognition with
+	Applications to Morphological Analysis and Spelling Correction",
+	cmp-lg/9504031.
+
+	There is a page devoted to this package:
+	http://www.eti.pg.gda.pl/~jandac/fsa.html
+
+In this file:
+
+  0. A WORD OF CAUTION
+  1. BASIC INFORMATION
+  2. FILE LIST
+  2.1. Information
+  2.2. Common source files
+  2.3. Source files common for all programs that use automata (not fsa_build)
+  2.4. Source files particular to fsa_build and fsa_ubuild
+  2.5. Source files particular to fsa_accent
+  2.6. Source files particular to fsa_guess
+  2.7. Source files particular to fsa_hash
+  2.8. Source files particular to fsa_morph
+  2.9. Source files particular to fsa_prefix
+  2.10. Source files particular to fsa_spell
+  2.11. Source files particular to fsa_synth
+  2.12. Source files particular to fsa_visual
+  2.13. Source files for other programs
+  2.14. Scripts
+  2.14.1 Skeleton scripts for emacs interface
+  2.14.2. Awk scripts
+  2.14.3. Perl scripts
+  2.14.4. Other scripts
+  2.15. Files supporting execution
+  2.16. Tcl/Tk interface
+  3. EXECUTION
+  3.1. Building automata for spelling correction and restoration of diacritics.
+  3.2. Building automata for perfect hashing.
+  3.3. Building automata for morphological analysis.
+  3.4. Building guessing automata (index a tergo) for morphological analysis.
+  3.5. Building and using guessing automata for guessing morphological
+       descriptions in mmorph format
+  3.7. Listing the contents of a dictionary
+  4. POTENTIAL PROBLEMS
+  5. MONEY
+  6. BUGS
+  7. Acknowledgements
+
+
+0. A WORD OF CAUTION
+
+  Please check your LOCALE and LANG environment variables (at least
+  under Unix -- I have never tried to run my programs under
+  Windowze). They influence the way strings are sorted by the command
+  `sort', or in other words they cause the command to malfunction. If
+  you use fsa_build on data that `sort' failed to sort, you will get all
+  sorts of errors. I don't check in fsa_build whether the data is
+  sorted properly, because it would introduce additional overhead. If
+  you want that overhead, use fsa_ubuild - it accepts data in
+  arbitrary order and with duplicates.
+
+  Refer to file INSTALL for compilation issues.
+
+1. BASIC INFORMATION
+
+  This package can be used for a number of purposes:
+  fsa_build		- to build automata to be used with other programs
+			  that use automata (fsa_*), data must be
+			  sorted and without duplicates;
+  fsa_ubuild		- to build automata as fsa_build, but slower
+			  and using more memory, with no restriction
+			  on order of data and presence of duplicates;
+  fsa_accent		- to restore diacritics in texts;
+  fsa_guess		- to perform approximate morphological analysis
+			  based on word endings;
+  fsa_hash		- to implement perfect hashing - to translate
+			  words into numbers, and numbers into words;
+  fsa_morph		- to perform morphological analysis;
+  fsa_prefix		- to list the contents of an automaton;
+  fsa_spell		- to check if the word is in a dictionary and
+			  to propose candidates for substitution
+			  in case of incorrect words;
+  fsa_synth		- to generate surface forms given a canonical form
+  			  and tags;
+  fsa_visual		- to prepare data for vcg - a graph
+			  visualization program.
+
+2. FILE LIST
+
+2.1. Information
+
+  CHANGES		- what has changed from previous versions
+  INSTALL		- how to compile and install the package
+  README		- this file
+  Times			- shows differences between sparse matrix and list
+			  representations
+  fsa_accent.1		- manual page for fsa_accent
+  fsa_build.1		- manual page for fsa_build and fsa_ubuild
+  fsa_guess.1		- manual page for fsa_guess
+  fsa_hash.1		- manual page for fsa_hash
+  fsa_morph.1		- manual page for fsa_morph
+  fsa_prefix.1		- manual page for fsa_prefix
+  fsa_spell.1		- manual page for fsa_spell
+  fsa_ubuild.1		- manual page for fsa_ubuild (pointer to fsa_build.1)
+  fsa_visual.1		- manual page for fsa_visual
+  fsa_synth.1		- manual page for fsa_synth
+  fsa_guess.5		- manual page for data for fsa_guess
+  fsa_morph.5		- manual page for data for fsa_morph
+  fsa_synth.5		- manual page for data for fsa_synth
+
+2.2. Common source files
+
+  Makefile		- you should know what it is
+  fsa.h			- arc structure and some common access functions
+  fsa_version.h
+  nstr.cc
+  nstr.h
+
+2.3. Source files common for all programs that use automata (not fsa_build)
+
+  common.cc
+  common.h
+  one_word_io.cc
+  text_io.cc		- alternative for one_word_io
+
+2.4. Source files particular to fsa_build and fsa_ubuild
+
+  build_fsa.cc
+  buildu_fsa.cc
+  builds_fsa.cc
+  mkindex.cc		- needed when compiled with A_TERGO
+  nindex.cc
+  nindex.h
+  nnode.cc
+  nnode.h
+  snode.cc
+  unode.cc
+  unode.h
+
+2.5. Source files particular to fsa_accent
+
+  accent.cc
+  accent.h
+  accent_main.cc
+
+2.6. Source files particular to fsa_guess
+
+  guess.cc
+  guess.h
+  guess_main.cc
+
+2.7. Source files particular to fsa_hash
+
+  hash.cc
+  hash.h
+  hash_main.cc
+
+2.8. Source files particular to fsa_morph
+
+  morph.cc
+  morph.h
+  morph_main.cc
+
+2.9. Source files particular to fsa_prefix
+
+  prefix.cc
+  prefix.h
+  prefix_main.cc
+
+2.10. Source files particular to fsa_spell
+
+  spell.cc
+  spell.h
+  spell_main.cc
+
+2.11. Source files particular to fsa_synth
+
+  synth.cc
+  synth.h
+  synth_main.cc
+
+2.12. Source files particular to fsa_visual
+
+  visual_main.cc
+  visualize.cc
+  visualize.h
+
+2.13. Other source files for programs
+
+  dump.cc		- prints structure of the automaton for some formats
+			  (not in Makefile, so not compiled by default)
+
+2.14. Scripts
+
+2.14.1 Skeleton scripts for emacs interface
+
+  jaccent-skeleton	- skeleton interface script for fsa_accent
+  jmorph-skeleton	- skeleton interface script for fsa_morph
+  jspell-skeleton	- skeleton interface script for fsa_spell
+  jguess-skeleton	- skeleton interface script for fsa_guess
+
+2.14.2. Awk scripts
+
+  mmorph23c.awk		- example script for converting mmorph output
+			  to 3 column format.
+  morph_data.awk	- example prep script for morphology
+  morph_infix.awk	- example prep script for morphology with infixes
+  morph_prefix.awk	- example prep script for morphology with prefixes
+  prep_atg.awk		- example prep script for guessing only categories
+  prep_atl.awk		- example prep script for guessing lexemes & categ.
+  prep_ati.awk		- example prep script for guessing l&c with infixes
+  prep_atp.awk		- example prep script for guessing l&c with prefixes
+  de_morph_data.awk	- example script for converting fsa_morph
+			  input to 3 column format
+  de_morph_infix.awk	- example script for converting fsa_morph
+			  input with coded infixes and prefixes into 3 column
+  demorph.awk		- example script for converting fsa_morph
+			  output into 3 column format
+
+2.14.3. Perl scripts
+
+  Because various awk versions are not mutually compatible, I translated
+  awk scriptis to perl using a2p.
+
+  mmorph23c.pl		- example script for converting mmorph output
+			  to 3 column format
+  morph_data.pl		- example prep script for morphology
+  morph_infix.pl	- example prep script for morphology with infixes
+  morph_prefix.pl	- example prep script for morphology with prefixes
+  prep_atg.pl		- example prep script for guessing only categories
+  prep_atl.pl		- example prep script for guessing lexemes & categ.
+  prep_ati.pl		- example prep script for guessing l&c with infixes
+  prep_atp.pl		- example prep script for guessing l&c with prefixes
+  atl_prefix.pl		- example prep script for a tergo with prefixes
+  prep_gen.pl		- example prep script for morphological generation
+  prep_genp.pl		- example prep script for morphological generation
+  			  with prefixes
+  prep_geni.pl		- example prep script for morphological generation
+  			  with infixes
+  de_morph_data.pl	- example script for converting fsa_morph
+			  input to 3 column format
+  de_morph_infix.pl	- example script for converting fsa_morph
+			  input with coded infixes and prefixes into 3 column
+  demorph.pl		- example script for converting fsa_morph
+			  output into 3 column format
+  chkmorph.pl		- example script checking whether guessed
+			  descritpions for mmorph produce inflected forms
+  gendata.pl		- example script to prepare data for a
+			  guessing automaton for prediction of
+			  morphological descriptions in mmorph format
+  sortatt.pl		- example script that sorts words on their
+			  features; the order is taken from the
+			  preamble of morphologicasl description for
+			  mmorph; the script is used by tclmacq.tcl
+  simplify.pl		- script used by the Tcl interface to fsa_guess
+			  tclmacq.tcl to expand descriptions where
+			  features are given as sets of alternatives,
+			  e.g. gender=m|n; the script produces several
+			  lines with one alternative in each one
+
+2.14.4. Other scripts
+
+  ie1			- bash script to help isolate data that causes trouble
+
+2.15. Files supporting execution
+
+  de.acc		- German accents
+  de.lang		- German characters (word-forming and case)
+  fr.acc		- French accents
+  fr.lang		- French characters (word-forming and case)
+  pl.acc		- Polish accents
+  pl.chcl		- Polish character substitutions
+  pl.lang		- Polish characters (word-forming and case)
+  jspell.el		- emacs interface (needs skeleton scripts)
+  dump.cc		- a program to print an automaton as
+  transitions
+
+2.16. Tcl/Tk interface
+
+  tclmacq.tcl		- tcl/tk script for morphological acquisition
+  tclmacq.tcl.in	- skeletal version of tclmacq.tcl
+  filesel.tcl		- third party file selection window
+  filesel.tcl		- identical to filesel.tcl
+  help.txt		- help file for the interface
+  lang.txt		- language file for the interface
+
+  Note: The files with the suffix ".in" contain a special sequence of
+  characters that is replaced with the location of fsa programs in
+  scripts without the suffix.
+
+3. EXECUTION
+
+  For info on on compilation and compile options, see file INSTALL.
+
+  All programs are provided with -v option, that lists version
+  details, and relevant compile options. See respective man pages
+  for documentation. A short summary of options can be obtained by
+  invoking a particular program with --help.
+
+  Some examples (Unix):
+
+  LANG=C sort -u mylist | fsa_build > mylist.fsa
+
+  cat mylist another_list | LANG=C sort -u | fsa_build -O > another.fsa
+
+  tr -cs A-Za-z '\012' < text.txt | fsa_spell -d my_dictionary.fsa
+
+  fsa_spell -d my_dictionary.fsa -d another_dictionary.fsa -e 2
+
+  mmorph -q -m my_dict | awk -F HT mmorph23.awk | awk -F HT\
+  morph_data.awk | fsa_ubuild -O -o my_dict.fsa
+
+  In the penultimate example words to check are taken from keyboard. Press
+  Ctrl-D twice to finish checking.
+  In the last example replace HT with a tabulation character in single
+  quotes. If you were to use fsa_build instead of fsa_ubuild, add
+  sort -u as the last filter before calling fsa_build. Setting LANG=C for sort
+  makes it sort properly. Generally, avoid using awk. Use perl instead.
+
+3.1. Building automata for spelling correction and restoration of diacritics.
+
+  Automata for spelling correction and (related to it) restoration of
+  diacritics contain lists of simple words. Therefore, no special
+  preparation of data is needed. The input should contain a list of
+  words, one word per line. Each line is treated as one word,
+  regardless of whether it contains spaces, or not. Examples:
+
+  fsa_ubuild -i wordlist -o words.fsa
+
+  LANG=C sort -u wordlist | fsa_build -o words.fsa
+
+3.2. Building automata for perfect hashing.
+
+  Perfect hashing provides mapping between words and a range of
+  numbers. I use it for simple words, but it can be used e.g. with
+  words with categories (such as those for morphological analysis) to
+  provide pointers to their semantic interpretation, etc. If you want
+  to know the mapping in advance, use fsa_build (and sort the input
+  data in advance). Remember that certain compile options (like
+  SORT_ON_FREQ, JOIN_PAIRS, etc., used by default in Makefile) change
+  the order of words in the automaton, so make sure you get what you
+  want. There are cases when the exact numbering of words is not
+  important, only the fact, that it is provided. In those situations,
+  you can also use fsa_ubuild. You can learn the mapping afterwards,
+  using fsa_hash or fsa_prefix. Examples:
+
+  LANG=C sort -u wordlist > wlist_sorted; fsa_build -i wlist_sorted -o w.fsa
+
+  some_process | fsa_ubuild > w.fsa
+
+3.3. Building automata for morphological analysis.
+
+  The first problem is to find morphological data. If you prepare such
+  data using mmorph from ISSCO, you can use awk with mmorph23c.awk or
+  mmorph23c.pl to convert the output of mmorph to a 3 column format,
+  the first column being the inflected form, the second one - the
+  canonical (or base) form, and the third one - the categories (or
+  annotations). I treat such format as a reference; it should be
+  relatively easy to convert output of other morphology programs to
+  that format.
+
+  The awk script runs under nawk and mawk. There may be problems
+  running it with other versions of awk. Therefore, I also provided
+  an equivalent perl script mmorph23c.pl that does the same job.
+
+  Because canonical forms could inflate the automaton, they must be
+  coded. I have included an awk script morph_data.awk that should do
+  the job. It has a corresponding perl script morph_data.pl. Use
+  tabulation as the field separator in awk. In the examples below, HT
+  should be replaces with a tabulation character enclosed in single
+  quotes. In a shell, you will normally need a special method for
+  inserting a control character into a command line. I use bash, and
+  the tabulation character should be preceded with Ctrl-V; it should
+  be the same under tcsh. Examples:
+
+  mmorph -q -m dict | awk -F HT -f mmorph23c.awk |\
+  awk -F HT -f morph_data.awk | fsa_ubuild -O -o dict.fsa
+
+  mmorph -q -m dict | awk -F HT -f mmorph23c.awk |\
+  awk -F HT -f morph_data.awk | LANG=C sort -u | fsa_build > dict.fsa
+
+  mmorph -q -m dict | perl mmorph23c.pl | perl morph_data.pl |\
+  LANG=C sort -u | fsa_build > dict.fsa
+
+  Note that if you install the package, perl scripts should have the
+  execution bit set, so you can simply write e.g. "mmorph23c.pl" instead
+  of "perl mmorph23c.pl".
+
+  If the language in question contains infixes (well, not
+  linguistically, just strings of characters that must be deleted
+  inside the inflected form, e.g. in German eingeladet -> einladen),
+  then you can use the scripts morph_infix.awk or morph_infix.pl to
+  prepare the data, and then use fsa_morph with the option -I. It may
+  be worth doing, as the automaton can be much smaller, e.g. I reduced
+  the size of a German morphology from 1720460 bytes to 669332
+  bytes.
+
+3.4. Building guessing automata (index a tergo) for morphological analysis.
+
+  I assume that you can have your data in the 3-column format
+  described above. You can use prep_atg.awk to prepare data for an
+  automaton that guesses only categories (useful for tagging),
+  prep_atl.awk for preparing an automaton that guesses both the
+  canonical forms and the categories, and prep_atp.awk for an
+  automaton that guesses both canonical forms, and categories, and
+  uses prefixes to distinguish some forms. In the
+  examples below, replace HT with the tabulation character in quotes.
+
+  awk -F HT -f prep_atg.awk dict | fsa_ubuild -o dict.atg
+
+  awk -F HT -f prep_atl.awk dict | LANG=C sort -u | fsa_build -O -o dict.atg
+
+  There are also perl scripts prep_atg.pl, prep_atl.pl, and prep_atp.pl,
+  corresponding to the awk scripts (i.e. doing the same job).
+
+3.5. Building and using guessing automata for guessing morphological
+     descriptions in mmorph format
+
+  First divide your morphological descriptions in mmorph format into
+  two files. The first file should include everything up to and
+  including the line with `@ Lexicon'. The default name for that file
+  would be `preamble', but you can change that.
+
+  The second file should contain the rest, i.e. the descriptions of
+  individual words. Its standard name would be `lexicon', but again
+  you can change that.
+
+  Call gendata.pl. If the language uses prefixes, give it a -P
+  option. If it uses both prefixes and infixes, use -I option. If
+  lexical forms have archiphonemes that stay close to their
+  beginnings, specify them with -a option (if there is more than one,
+  then separate them with semicolons). Example:
+
+  perl gendata.pl -I -a 'sep_part;c_h' | uniq | LANG=C sort -u > guess_data
+
+  In the example above, standard names for the preamble and the
+  lexicon are assumed. Usually you don't need to invoke perl
+  explicitly, i.e. you can have no `perl' in front of
+  gendata.pl. Option -I was used, which indicates that the language
+  has infixes (like German or Dutch).
+
+  Create the guessing automaton in the usual way. fsa_build or
+  fsa_ubuild should give the best results when compiled with
+  GENERALIZE compile option. Example:
+
+  fsa_build -X -O -i guess_data -o guess.fmm
+
+  Then run fsa_guess on a list of unknown words:
+
+  fsa_guess -m -I -d guess.fmm -i unknown_words.txt > guesses.txt
+
+  In the example above, option -I was used to treat prefixes.
+
+  You can use two filters to improve the quality of those
+  guesses. chkmorph.pl rejects those descriptions in guesses that do
+  not generate the required inflected form. This script is rather
+  slow, but it is worth using. sortondesc.pl sorts descriptions for
+  one particular word so that the descriptions that also show in
+  guesses for other words appear first.
+
+  Now you can use the Tcl/Tk interface `tclmacq.tcl'. You can invoke
+  it with the name of the file with guesses:
+
+  tclmacq -G guesses.txt &
+
+  You can customize the language of the interface by adding your own
+  entries to the files help.txt and lang.txt.
+
+3.6. Building and using automata for morphological generation
+
+  I assume that you have you data in 3-column format described
+  above. You can use prep_gen.pl to convert data in that format into a
+  format suitable as input data for automata for morphological
+  generation. Use prep_genp.pl if the language has prefixes, and
+  prep_geni.pl if it has infixes.
+
+  mmorph -q -m dict | perl mmorph23c.pl |\ perl prep_gen.pl |\
+  LANG=C sort -u | fsa_build > dict.fsa
+
+  To generate a surface form with given features, call fsa_synth:
+
+  fsa_synth -d dict.fsa
+
+  and give it a canonical form and the desired features, e.g.:
+
+  akt n[gen=mna num=sg case=gen]
+
+  where the canonical form ("akt") starts from the first column, and
+  is separated from the tags ("n[gen=mna num=sg case=gen]") with
+  spaces and/or horizontal tabulation characters.
+
+  When you want to list all forms with num=sg, call fsa_synth with -r
+
+  fsa_synth -d dict.fsa -r
+
+  and on input, specify the features as a regular expression:
+
+  akt .*num=sg.*
+
+  To list all surface forms for a canonical form use -a option.
+
+3.7. Listing the contents of a dictionary
+
+  You can used fsa_prefix for this purpose. You can just give it an
+  empty prefix to search for. However, the program first prints the
+  prefix, a colon, and a space, and the first word after that. In the
+  following lines, the words are preceded with a space. You should
+  also note that the order of words may appear to be random - the
+  result of compression. So the correct way of doing the job is:
+
+  cat /dev/null | fsa_prefix -d dictionary.fsa | sed -e 's/^: //g' \
+  -e 's/^ //g' | sort > some_file
+
+  If you do not like this solution, just give fsa_prefix -a option.
+
+4. POTENTIAL PROBLEMS
+
+  You will have UNPREDICTIBLE results if you use UNSORTED lists with
+  fsa_build, or if those lists contain REPETITIONS. Use sort -u on
+  input data for fsa_build.
+
+  Beware of LANG and various locale environment variable
+  settings. They influence the output of sort making it unusable (all
+  for your convenience).
+
+  If you change any compile option, and compile again, do
+  make clean
+  first. It may save you a lot of troubles.
+
+  I have not run these programs under MSDOG. There may be problems with
+  CR LF sequence there; you may have to `eat' CR at the end of words.
+
+  If you encounter compilation errors, you may try to upgrade your
+  compiler. Older versions of g++ do not support local definitions in
+  loops (so you have redeclared variables), and may also cause other
+  problems. I will try to test the package with older software, and on
+  sparcs, but I cannot assure you that my software will work with any
+  compiler version. In case of redeclared variables, you may simply
+  change their names.
+
+  Some versions of g++ or stdlibc++ contain errors. You may want to
+  try LOOSING_RPM option, and turn off optimization.
+
+  If you get strange results of morphological analysis, you may have
+  forgotten to use appropriate options (e.g. -I).
+
+  If you get `no memory for the automaton' in fsa_ubuild, try using
+  fsa_build. It is not only faster and uses less memory, but if you
+  feed fsa_ubuild with data in random order, automata that are created
+  during the construction phase may be much larger than the final result.
+
+  If you have a VERY large word list, and you use fsa_build or
+  fsa_ubuild with `-O', and you're tired of waiting for the results,
+  take a walk. If you do not have time for a walk, delete MORE_COMPR
+  from the list of options or do not use -O.
+
+5. LICENCE
+
+  From version 0.42 on, the package can be distributed with a GPL
+  licence, available e.g. at
+  http://www.gnu.org/licenses/licenses.html, except for a third party
+  file filesel.tcl that has its own licence. I don't include a GPL in
+  the package since the legal gibberish makes it too difficult to
+  understand for me whether I can put the licence here and have a
+  third party file in the package as well.
+
+  These programs are provided `as are'. They work correctly for me, but
+  I offer you no guarranty. If you have lost a million, it was your
+  million, not mine.
+
+  Emacs interface - jspell.el - has the usual GNU Copyright. That
+  copyright is distributed with emacs. You must have emacs to use
+  the interface. You may use other programs without the interface.
+
+6. BUGS
+
+  The `node' class is much too large. If you have spotted this,
+  don't write to me - I already know that. The emacs interface is
+  modified from ispell.el using a technique called voo-doo
+  programming. If you have spotted a real bug, write to me: Jan Daciuk,
+  jandac@eti.pg.gda.pl. Try reading `Potential Problems' section above.
+
+7. Acknowledgements
+
+  Dominique Petitpierre from ISSCO, Geneva, provided very useful
+  comments at the early stage of development of these programs. He wrote
+  a part of Makefile as well. People from ISSCO made it possible to
+  develop the programs in general, and they took me for a seminar to
+  Archamps, where I was inspired to write the package after having
+  listened to a talk by Lauri Karttunnen. The Swiss Federal
+  Scholarship Commission provided me with a scholarship during my stay
+  at ISSCO. Some parts of some programs, and a compagnon library, were
+  written during my stay in Alfa Informatica, Rijksuniversiteit
+  Groningen, the Netherlands.

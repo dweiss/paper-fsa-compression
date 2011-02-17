@@ -1,0 +1,89 @@
+.TH fsa_accent 1 "Jul. 1st, 1999"
+.SH NAME
+fsa_accent - find words that deprived of diacritics match words from input
+.SH SYNOPSIS
+.B fsa_accent
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+.SH DESCRIPTION
+.B fsa_accent
+reads lines from the input. Each line contains one word. Every word
+is looked up in specified dictionaries. All words that when deprived of
+diacritics match the input word are printed.
+.SH OPTIONS
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified. Dictionaries are automata built using
+.I fsa_build
+or
+.I fsa_ubuild.
+.TP
+.BI "\-a " accent_file
+use
+.I accent_file
+to establish relationships between characters with diacritics, and those
+without them. The first character of the
+.I accent_file
+is a comment character. All lines that begin with it are comments, and
+are ignored. All other lines specify one character without diacritics
+for one or more characters with diacritics. The first character in a
+line is a character without diacritics. It is followed by one or more
+spaces and HT characters, and then by a string of characters without
+diacritics, followed immediately by new line. There should be no spaces
+between characters with diacritics. For each word containing a character
+found in the first column in the
+.I accent_file
+words containing that character as well as characters listed to the
+right of it in the
+.I accent_file
+will be looked up.
+.TP
+.BI "\-i " input_file
+specifies an input file, i.e. a file with words that lack accents. More
+input files can be specified in that way. If the option is not present,
+standard input is used.
+.TP
+.BI "\-l " language_file
+specifies a file that hold language specific information, i.e. (for now)
+characters that form words, and pairs of (lowercase, uppercase)
+characters for case conversion. If the option is not specified, latin
+letters with standard case conversions wil be used.
+
+Note: whether this information will be used or not depends on the module
+used for I/O handling (one_word_io or text_io).
+.TP
+.B \-v
+prints version details.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid option used, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+4
+Not enough memory.
+.TP
+5
+Accent file could not be opened or used.
+.SH SEE ALSO
+.I fsa_build(1),
+.I fsa_guess(1),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).
+.SH BUGS
+Send bug reports to the author: Jan Daciuk, jandac@pg.gda.pl.

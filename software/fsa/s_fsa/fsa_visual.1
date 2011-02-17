@@ -1,0 +1,59 @@
+.TH fsa_visual 1 "Aug. 16th, 1999"
+.SH NAME
+fsa_visual - describe automaton in the language of vcg for visualization
+.SH SYNOPSIS
+.B fsa_prefix
+[
+.I options
+]
+[
+.I >outfile
+]
+.SH DESCRIPTION
+.B fsa_visual
+Produces data for vcg \- a graph visualization program. Final
+transitions are represented with thicker red edges, and their labels
+end with an exclamation mark. When the program is compiled with
+NUMBERS compile option, and the automaton was produced with \-N
+runtime option, the node information field contains the number of
+different words in the right language of the node, i.e. strings
+recognized by the sub-automaton that begins in the node in question.
+.SH OPTIONS
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified. Dictionaries are automata built using
+.I fsa_ubuild
+or
+.I fsa_build
+without \-O option.
+.TP
+.B \-v
+print version details.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid options, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+4
+Not enough memory.
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1),
+.I fsa_guess(1),
+.I fsa_guess(5),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_morph(5),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1).
+Compressed automata cannot be handled.
+
+Send bug reports to the author: Jan Daciuk, jandac@pg.gda.pl.

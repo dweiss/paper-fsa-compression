@@ -1,0 +1,394 @@
+%iso8859-1
+*English
+Morphological Dictionary Acquisition Tool
+
+Contents
+ 1. Introduction
+ 2. Loading the guesses file.
+ 3. Producing descriptions in mmorph format
+ 4. Saving descriptions in a file.
+ 5. Customization
+
+
+1. Introduction
+
+The purpose of this tool is to assist in gathering data for a
+morphological dictionary. It is assumed that a morphological
+dictionary for a given language already exists, and that it was
+created using mmorph - a morphology tool developed at ISSCO, Geneva.
+It is also assumed that you use fsa utilities available from
+http://www.pg.gda.pl/~jandac/fsa.html .
+
+In order to use this tool you need mmorph and fsa_guess, as well as a
+guessing automaton for fsa_guess. You can produce that automaton with
+fsa_build or fsa_ubuild, and prepare data for them with scripts
+available from the same fsa utilities package.
+
+The basic procedure is as follows:
+a) Produce a guessing automaton from the dictionary. Consult the
+   README file from the fsa utilities package, and manual pages for
+   fsa_build(1), fsa_guess(1), and fsa_guess(5). You will also find
+   appropriate scripts in the same package.
+b) Produce a list of words not present in the dictionary. You can use
+   fsa_spell for that purpose - consult the manual page for
+   fsa_spell(1).
+c) Run fsa_guess with the guessing automaton on the list of unknown
+   words, and save the resulting file (the guesses).
+d) You can use chkmorph.pl script to eliminate those guesses that
+   do not produce the inflected form they are supposed to produce.
+e) Load the guesses file to the Morphological Dictionary Acquisition Tool.
+f) Use the Morphological Dictionary Acquisition Tool to produce
+   descriptions in mmorph format
+g) Save descriptions in a file.
+h) Merge the new descriptions with existing ones
+
+2. Loading the guesses file.
+
+The guesses file can either be loaded using menus, or specified in the
+command line, or using "Load new" button under the "Word form" window.
+To load the file from menus, choose File/Open guesses, and then choose
+appropriate file. To specify the file in the command line, use -G
+guessesfile. It has to be capital G, as tcl/tk steel -g. To load
+guesses using a button, just press it.
+
+3. Producing descriptions in mmorph format
+
+For each word form you are interested in, do:
+a) Click the form. One or more descriptions should appear in
+   the Descriptions' pane. 
+b) Choose a description from the Descriptions' pane. If you are not
+   sure which of them is correct, click on the description and press
+   Mmorph button. All forms derived from that description should
+   appear in the Mmorph output pane. If you cannot see the difference
+   between two descriptions, choose both (use Control button) and
+   press Mmorph button. The Mmorph pane should show the difference
+   between forms produced by those descriptions. If you want to see if
+   all required forms are generated, click on "yes" in the "Expand
+   alternatives" field. Then if the description contains
+   e.g. "case=nom|acc", i.e. more than one possible value, the
+   description will be broken into two. The first one will contain
+   "gen=mon", the second one -- "gen=acc".
+c) If none of the descriptions in Descriptions pane is correct, you
+   can correct it by clicking on Correct button. A new popup window
+   will appear, in which you could make corrections. Another
+   possibility is to correct entries that appear in the mmorph output
+   window, and then to press mAtch mmorph. The tool will try to find
+   the matching description. In order to do that, it needs additional
+   information, usually found in the file "paradigm", or in another
+   file that is specified with cusTomize/paradigm file. The first
+   character of that file is a character that begins a comment (you
+   can change it if you like). All lines in the file beginning with
+   that character are ignored. Other lines are formed in three
+   columns. The columns are separated with spaces or horizontal
+   tabulation characters. The first column contains a part of speech
+   (POS). The other two columns are relevant only for descriptions
+   containing that POS. There can be more than one line with the same
+   POS. The second column contains a regular expression. If the
+   expression matches the description, then the third column contains
+   a list of features, such that if we change their values, we might
+   arrive at the correct description. A feature name can be followed
+   with an asterisk. In that case all possible combinations of the
+   values of that feature will be generated. If the correct
+   description is found, the background color of the corrected entry
+   will be changed to green. Notice that it may take some time, during
+   which the mAtch mmorph button will still be pressed.
+   You can also use guided correction. Press the right mouse button on
+   the description you want to change.
+d) Press the Save button. The description is added to a list of
+   descriptions that will be saved at the end of the session
+   (i.e. when you quit the tool). Depending on the "Save removes"
+   radio buttons, saving the description removes all word forms
+   generated by it from the word form pane, the current form (the one
+   that was used for guessing), or none.
+
+4. Saving descriptions in a file.
+
+The descriptions are saved automatically when you quit by pressing on
+the Exit button, or choosing Exit from the File menu. You can specify
+the output file with -o command line option.
+
+5. Customization
+
+Command line options can be used to change the behavior of the
+tool. Remember to separate the option from its value with a space.
+
+You can change the language of menus, buttons, and labels by either
+specifying the language in a command line using -l, or by choosing
+Customize/Language menu entry. A description for that language must
+exist in the language description file. The file itself may be
+specified using -c command line option.
+
+You can specify the font used for displaying word forms, descriptions,
+and mmorph output either by choosing Customize/Font from the menus, or
+with -f command line option.
+
+You can specify the name of the file produced when pressing Mmorph
+button, and being the input for mmorph so that it can expand it. You
+can do that using -m command line option.
+
+%iso8859-2
+*Polski
+Pozyskiwanie opisów morfologicznych
+
+Spis tre¶ci
+ 1. Wprowadzenie
+ 2. Za³adowanie pliku podpowiedzi
+ 3. Tworzenie opisów w formacie programu mmorph
+ 4. Zachowanie opisów w pliku
+ 5. Dostosowanie do potrzeb u¿ytkownika
+
+
+1. Wprowadzenie
+
+Celem narzêdzia jest pomoc w zbieraniu danych dla potrzeb s³ownika
+morfologicznego. Zak³ada siê, ¿e taki s³ownik ju¿ istnieje i ¿e zosta³
+utworzony z u¿yciem programu mmorph opracowanego w ISSCO w
+Genewie. Zak³ada siê równie¿, ¿e u¿ytkownik stosuje pakiet programów
+wykorzystuj±cych automaty skoñczone dostêpny pod adresem
+http://www.pg.gda.pl/~jandac/fsa.html .
+
+Do skorzystania z narzêdzia konieczna jest instalacja programów mmorph
+i fsa_guess a tak¿e automat zgaduj±cy (index a tergo) dla programu
+fsa_guess. Automat mo¿na utworzyæ korzystaj±c ze skryptów i programu
+fsa_build zawartych w pakiecie automatów skoñczonych.
+
+Tryb korzystania z narzêdzia jest nastêpuj±cy:
+a) Utworzenie automatu zgaduj±cego na podstawie s³ownika. Odno¶ne
+   informacje znajduj± siê w pliku README pakietu automatów i stronach
+   podrêcznika dla fsa_build(1), fsa_guess(1) i fsa_guess(5). W tym
+   samym pakiecie znajduj± siê tak¿e pomocne skrypty.
+b) Utworzenie listy s³ów nie wystêpuj±cych w s³owniku. Mo¿na do tego
+   celu u¿yæ programu fsa_spell - nale¿y zapoznaæ siê z po¶wiêcon± mu
+   stron± podrêcznika fsa_spell(1).
+c) Przetworzenie listy nieznanych s³ów za pomoc± programu fsa_guess z
+   u¿yciem automatu odgaduj±cego i zachowanie wyników (zbioru
+   podpowiedzi) w pliku.
+d) Za³adowanie pliku podpowiedzi do narzêdzia.
+e) U¿ycie narzêdzia do utworzenia opisów w formacie programu mmorph.
+f) Zachowanie opisów w pliku.
+g) Po³±czenie nowych opisów z ju¿ istniej±cymi.
+
+2. Za³adowanie pliku podpowiedzi
+
+Plik podpowiedzi mo¿na za³adowaæ u¿ywaj±c menu lub opcji
+wykonania. Korzystaj±c z menu, nale¿y wybraæ Plik/Otwórz plik
+podpowiedzi, a nastêpnie wybraæ odpowiedni plik z listy. Nazwê pliku
+podpowiedzi mo¿na te¿ podaæ w wierszu wywo³ania poprzedzaj±c go
+napisem -G i odstêpem.
+
+3. Tworzenie opisów w formacie programu mmorph
+
+Dla ka¿dego s³owa nale¿y:
+a) Klikn±æ na s³owo. W okienku Opisy powinien pojawiæ siê co
+   najmniej jeden opis. Przesuwanie kursora w tym okienku powoduje
+   pojawianie siê stosownych opisów w okienku opis.
+b) Wybraæ opis z okienka Opis. W przypadku w±tpliwo¶ci, po wybraniu
+   opisu mo¿na nacisn±æ na klawisz Mmorph, co spowoduje wy¶wietlenie
+   w okienku Mmorph wszystkich form utworzonych na podstawie tego
+   opisu. Mo¿na te¿ wy¶wietliæ ró¿nice w formach tworzonych na
+   podstawie dwóch ró¿nych opisów wybieraj±c te opisy (pos³uguj±c siê
+   klawiszem Ctrl i lewym przyciskiem myszy) i naciskaj±c klawisz
+   Mmorph. W celu sprawdzenia, czy generowane s± wszystkie formy
+   danego s³owa mo¿na zaznaczyæ ,,tak'' w polu ,,Upraszczaæ
+   alternatywy''. Wówczas je¶li np. w opisie znajdzie siê cecha
+   ,,case'' z dwoma mo¿liwymi warto¶ciami: ,,mon'' i ,,acc'', czyli
+   innymi s³owy je¶li znajdzie siê tam napis ,,case=mon|acc'', to dany
+   opis zostanie roz³o¿ony na dwa. W pierwszym bêdzie ,,gen=mon'', w
+   drugim -- ,,gen=acc''.
+c) Je¿eli ¿aden z opisów z okienka Opisy nie jest prawid³owy, mo¿na go
+   poprawiæ naciskaj±c klawisz Popraw. Pojawi siê osobne okno, w
+   którym bêdzie mo¿na dokonaæ poprawek. Inn± mo¿liwo¶ci± jest
+   poprawienie form wy¶wietlanych w okienku ,,Rozwiniêcie przez
+   mmorph'' i naci¶niêcie klawisza ,,Wybierz odmianê wg
+   mmorph''. Narzêdzie spróbuje wówczas znale¼æ taki opis, który
+   produkuje poprawione formy. Narzêdzie potrzebuje do tego dodatkowej
+   informacji zapisanej w pliku ,,paradigm'', lub w pliku, którego
+   nazwa zosta³a ustalona przez wybranie Dostosuj/Plik z nazwami
+   paradygmatów. Pierwszy znak tego pliku jest znakiem pocz±tku
+   komentarza (mo¿na go dowolnie zmieniaæ). Wiersze zaczynaj±ce siê
+   tym znakiem nie s± przez narzêdzie interpretowane. Pozosta³e
+   wiersze maj± po trzy kolumny, oddzielone od siebie odstêpami lub znakami
+   tabulacji. Pierwsza kolumna zawiera nazwê czê¶ci mowy. Pozosta³e
+   dwie kolumny odnosz± siê wy³±cznie do opisów z tak± czê¶ci±
+   mowy. Wierszy z opisem danej czê¶ci mowy mo¿e byæ wiêcej. Druga
+   kolumna zawiera wyra¿enie regularne. Je¶li to wyra¿enie wystêpuje w
+   opisie, to trzecia kolumna zawiera nazwy cech, których zmiana mo¿e
+   spowodowaæ, ¿e opis bêdzie produkowa³ poprawione formy pokazane w
+   okienku mmorph. Je¿eli po cesze wyst±pi gwiazdka, to bêd± brane pod
+   uwagê wszystkie kombinacje warto¶ci danej cechy. Je¿eli narzêdzie
+   znajdzie odpowiedni opis, kolor t³a tego opisu zostanie zmieniony
+   na zielono. Poszukiwanie odpowiedniego opisu mo¿e trwaæ do¶æ d³ugo
+   (w zale¿no¶ci od zawarto¶ci pliku ,,paradigm'' i liczby warto¶ci
+   podanych tam cech). W czasie wyszukiwania klawisz ,,Wybierz odmianê
+   wg mmorph'' jest stale wci¶niêty.
+   Mo¿liwe jest tak¿e u¿ycie poprawiania wspomaganego przez
+   program. Wystarczy nacisn±æ prawy przycisk myszy, gdy kursor
+   znajdzie siê nad opisem do poprawienia.
+d) Nacisn±æ klawisz Zachowaj. W zale¿no¶ci od tego, który z klawiszy
+   radiowych na prawo jest wci¶niêty, zachowanie spowoduje tak¿e
+   usuniêcie z okienka S³owo wszystkich form produkowanych przez ten
+   opis, tylko bie¿±cej formy (tej, która pos³u¿y³a do odgadniêcia
+   opisu), lub ¿adnej.
+
+4. Zachowanie opisów w pliku
+
+Opisy zachowywane s± automatycznie przy opuszczaniu narzêdzia za
+pomoc± menu Plik/Koniec lub przycisku Koniec. Mo¿liwa jest zmiana
+standardowej nazwy pliku opisów za pomoc± opcji -o podanej w wierszu
+wywo³ania.
+
+5. Dostosowanie do potrzeb u¿ytkownika
+
+Mo¿na u¿ywaæ opcji w wierszu wywo³ania programu w celu zmiany
+zachowania narzêdzia. Nale¿y wówczas pamiêtaæ o oddzieleniu odstêpem
+opcji od jej warto¶ci.
+
+Mo¿na zmieniæ jêzyk u¿ywany w menu, na przyciskach i w etykietach
+podaj±c nazwê jêzyka po opcji -l w wierszu wywo³ania programu, lub
+wybieraj±c z menu Dostosuj/Jêzyk. Opis dla tego jêzyka musi istnieæ w
+pliku opisów jêzyków. Nazwê tego pliku mo¿na zmieniæ u¿ywaj±c opcji -c
+w wierszu wywo³ania programu.
+
+Mo¿na zmieniæ czcionkê u¿ywan± do wy¶wietlania s³ów, opisów i form
+tworzonych za pomoc± programu mmorph wybieraj±c Dostosuj/Czcionka z
+menu lub podaj±c nazwê czcionki po opcji -f w wierszu wywo³ania
+programu.
+
+Mo¿na zmieniæ nazwê pliku tworzonego dla potrzeb programu mmorph
+w celu wy¶wietlenia form tworzonych na podstawie danego opisu u¿ywaj±c
+opcji -m w wierszu wywo³ania programu.
+
+%iso8859-1
+*Francais
+Outil d'acquisition des descriptions morphologiques
+
+Table des matiers
+ 1. Introduction
+ 2. Chargement du fichier de prévisions
+ 3. Création des descriptions dans le format de mmorph
+ 4. Sauvgarde des description dans un fichier.
+ 5. Personnalisation
+
+1. Introduction
+
+Le but de ce outil est d'assister au utilisateur dans le development
+des dictionaires morphologiques. On assume qu'un dictionaire
+morphologique pour la langue en question déjà existe et qu'il a été
+créé avec mmorph - un programme dévélopé à l'ISSCO à Genève. Vous avec
+besoin aussi d'un ensemble de programmes pour la manipulation
+d'automates à états finis disponible de
+http://www.pg.gda.pl/~jandac/fsa.html .
+
+Vous avec besoin de mmorph, fsa_guess et un automate devinateur pour
+fsa_guess. Vous pouvez créer l'automate en utilisant fsa_build ou
+fsa_ubuild, avec les données preparées avec des scripts disponible
+dans le même paquet.
+
+La procedure de base et suivante:
+a) Produire un automate devinateur à l'aide du dictionnaire. Consulter
+   le mannuel pour fsa_build(1), fsa_guess(1) et fsa_guess(5). Vous
+   trouverez des scripts outils dans le même paquet.
+b) Produire une liste des mots qui n'existent pas (encore) dans le
+   dictionnaire. Vous pouvez utiliser fsa_spell pour ce but - consultez
+   le manuel pour fsa_spell(5).
+c) Lancer fsa_guess avec l'automate devinateur sur la liste des mots
+   inconnus et sauver le resultats (les prévisions) dans un fichier.
+d) Vous pouvez utiliser un script chkmorph.pl pour éliminer cettes
+   prévisions qui ne peuvent pas produire le mot qu'elles doivent produire.
+e) Charger le fichier des prévisions dans l'outil.
+f) Utiliser l'util pour produire des descritions dans le formatte de
+   mmorph.
+g) Sauvegarder les descriptions dans un fichier.
+h) Fusionner des nouveaux descriptions avec ceux qui déjà existent.
+
+2. Chargement du fichier de prévisions
+
+Le fichier des prévisions peut être chargé en utilisant les menus ou
+avec la ligne de commande. Pour charger le fichier en utilisant les
+menus, sélectionnez Fichier/Ouvrir fichier des prévisions et
+sélectionnez un fichier. Pour faire la même chose de la ligne de
+commande, utilisez l'option -G suivie d'une espace et le nom du
+fichier.
+
+3. Création des descriptions dans le format de mmorph
+
+Pour chaque forme flechie à traiter:
+a) Cliquez la forme flechie. Au moins une description doît
+   apparaître dans le fenêtre Descriptions. Si vous utilisez les
+   touches curseurs pour changer les mots dans cette fenêtre, les
+   descriptions changent aussi.
+b) Séléctionnez une description de la fenêtre Descriptions. Si vous
+   n'etez pas sûr laquelle description est correcte, cliquez sur une et
+   appuyer sur la touche Mmorph. Toute les formes crées  par mmorph à
+   la base de cette description vont apparaître dans le fenêtre
+   Mmorph. Pour voir la difference entre deux descriptions,
+   séléctionnez-les et appuyer sur la touche Mmorph. La fenêtre doit
+   montrer les différences entre les mots produits par les deux
+   descriptions. Si vouz voulez voir si toutes les formes flechies
+   sont produites, cliquez sur "oui" en Simplifier des
+   alternatifs. Dans ce cas si la descriptions contiens par exemple
+   "case=nom|acc", c'ést-à-dire plus qu'une valeur possible, la
+   description aura été divisée en deux. La première contiendra
+   "case=nom", l'autre - "case=acc".
+c) Si aucune des descriptions dans la fenêtre Descriptions n'est pas
+   correcte, vouz pouvez la corriger en appuyant la touche Corriger. Une
+   nouvelle fenêtre apparaîtra et vous y pourrez éditer la
+   description. Il y a encore une possibilité. Vous pouvez corriger
+   les formes produites par mmorph. Puis appuyez sur la touche Trouver
+   description selon mmorph. L'outil va essayer de trouver la
+   description qui produit le contenu de la fenêtre Expansion mmorph
+   (avec vos corrections). Il a besoin d'information
+   supplémentaire. Elle se trouve dans le fichier "paradigm" ou dans
+   un autre fichier dont nom était donné avec Personnaliser/Fichier
+   avec les noms des paradigmes. Le premier caractère de ce fichier
+   commence un commentaire. Chaque ligne qui commence par ce caractère
+   est ignorée par l'outil. Les autres sont divisées en trois
+   colonnes. La première contiens la partie du discours. Il est
+   possible d'avoir plusieurs lignes avec la même partie du discours,
+   mais les secondes colonnes doivent être différentes. La seconde
+   colonne contient une expression régulière. Si la description dans
+   la fenêtre Descriptions contient la partie du discours et
+   l'expression régulière s'accorde avec la description, la troisième
+   colonne contient une liste de traits qu'on peut changer pour
+   arriver à la bonne description. Si le nom du trait est suivi par
+   une étoile, toutes les combinaisons des valeurs de ces traites
+   seront produites. Si la description correcte est trouvée, elle sera
+   affichée en vert. Pendant la cherche la touche "Trouver
+   descriptions selon mmorph" reste appuyée.
+   Il est possible d'utiliser une correction guidée. Il suffit appuyer
+   sur le bouton droite du souris quand il est sur la description à
+   corriger.
+d) Appuyer sur la touche Sauvegarder. La description est ajoutée à la
+   fin de la liste des descriptions qui seront sauvegardées à la fin
+   de la session (c'est-à-dire quand on quitte l'outil). Selon la
+   valeur de "Sauvegarder efface", tout les mots produits par la
+   description, seulement le mot courant (ce qui était à l'origine de
+   la prévision), ou rien sera effacé de la fenêtre Forme flechi.
+
+4. Sauvgarde des description dans un fichier.
+
+Les descriptions sont sauvegardées automatiquement quand vous quitter
+l'outil avec Fichier/Quitter ou en appuyant sur la touche
+Quitter. Vous pouvez changer le nom du fichier avec l'option -o quand
+vous lancer l'outil.
+
+5. Personnalisation
+
+Les options de la ligne de commande peuvent être utilisées pour
+changer le comportement de l'outil. N'oubliez pas d'introduire une
+espace entre l'option et son valeur.
+
+Vous pouvez changer la langue de menus, touches ou étiquettes soit en
+donnant le nom de la langue après l'option -l dans la ligne de
+commande, soit en utilisant les menus Personnaliser/Langue. Une
+description pour la langue doit être présente dans le fichier de
+description de langues. Le nom de ce fichier peut être changé avec
+l'option -c dans la ligne de commande.
+
+Vous pouvez changer la police des caractères utilisée pour afficher
+les mots avec l'option -f dans la ligne de commande ou avec les menus
+en utilisant Personnaliser/Police des caractères.
+
+Vous pouvez changer le nom du fichier avec une description pour mmorph
+(à afficher dans la fenêtre Mmorph) avec l'option -m dans la ligne de
+commande.

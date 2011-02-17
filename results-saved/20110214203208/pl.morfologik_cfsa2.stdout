@@ -1,0 +1,111 @@
+Assuming input is already sorted
+  2.86s, sequences: 1000000
+  6.35s, sequences: 2000000
+  9.34s, sequences: 3000000
+Building FSA...                        0.00 sec.  [ 11.26 sec.]
+Input sequences                   3,672,200
+Serializing CFSA2...          
+Label distribution...         
+0x2b                                 51,989
+0x65                                 47,705
+0x61                                 46,697
+0x6f                                 44,432
+0x69                                 39,388
+0x41                                 38,868
+0x63                                 34,449
+0x6d                                 26,711
+0x79                                 26,410
+0x6e                                 26,117
+0x75                                 21,411
+0x73                                 20,337
+0x6b                                 19,915
+0x7a                                 18,511
+0x72                                 17,801
+0xb1                                 17,237
+0x6c                                 17,061
+0x74                                 16,519
+0x77                                 16,236
+0xf3                                 13,820
+0xea                                 11,535
+0x64                                  9,218
+0x6a                                  8,604
+0xb3                                  7,874
+0x67                                  7,391
+0x70                                  6,596
+0x62                                  6,560
+0xf1                                  6,054
+0xbf                                  5,896
+0x44                                  5,771
+0xb6                                  5,107
+0x68                                  4,985
+0x43                                  4,414
+0xe6                                  4,310
+0x45                                  3,709
+0x42                                  3,483
+0x46                                  3,074
+0x66                                  2,732
+0x47                                  1,878
+0x3a                                  1,821
+0xbc                                  1,410
+0x48                                  1,289
+0x49                                    839
+0x76                                    662
+0x2e                                    546
+0x4a                                    476
+0x4b                                    337
+0x4c                                    181
+0x78                                    173
+0x4d                                    131
+0x31                                    130
+0x2d                                    117
+0x32                                     83
+0x33                                     81
+0x4e                                     70
+0x53                                     69
+0x71                                     69
+0x52                                     52
+0x4f                                     50
+0x50                                     48
+0x54                                     36
+0xe9                                     32
+0x5a                                     28
+0x57                                     20
+0xfc                                     19
+0xf6                                     17
+0xe1                                     16
+0x55                                     12
+0xa6                                      9
+0xaf                                      6
+0xe8                                      5
+0x58                                      4
+0xb9                                      4
+0xe4                                      4
+0xa3                                      3
+0x51                                      2
+0x56                                      2
+0x59                                      2
+0xeb                                      2
+0xfd                                      2
+0xa9                                      1
+0xac                                      1
+0xbe                                      1
+0xc6                                      1
+0xc8                                      1
+0xc9                                      1
+0xd8                                      1
+0xe7                                      1
+0xec                                      1
+0xf8                                      1
+0xfa                                      1
+Label distribution...                  0.01 sec.  [ 11.32 sec.]
+Compacting...                 
+Initial output size               1,966,038
+Moved 25 states, output size      1,909,044
+Moved 50 states, output size      1,902,656
+Moved 75 states, output size      1,899,749
+Moved 100 states, output size     1,896,078
+Moved 125 states, output size     1,892,864
+Moved 150 states, output size     1,889,195
+Will move 150 states, final size    1,889,195
+Compacting...                          1.71 sec.  [ 13.52 sec.]
+Serializing CFSA2...                   2.31 sec.  [ 13.57 sec.]

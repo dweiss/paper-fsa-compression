@@ -1,0 +1,77 @@
+.TH fsa_prefix 1 "Jul. 1st, 1999"
+.SH NAME
+fsa_prefix - print all words beginning with the specified prefix
+.SH SYNOPSIS
+.B fsa_prefix
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+.SH DESCRIPTION
+.B fsa_prefix
+reads lines from the input. Each line contains one word or nothing.
+The word is treated as a prefix. All words in the specified dictionaries
+that have the word as their prefix are printed.
+
+If the word is empty, the whole contents of the dictionary is printed.
+.SH OPTIONS
+.TP
+.B \-a
+print the whole dictionary. This option had to be introduced because
+of a recent bug in glibc++ that treats reading an empty line as an error.
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified. Dictionaries are automata built using
+.I fsa_ubuild
+or
+.I fsa_build.
+.TP
+.BI "\-i " input_file
+specifies a file with prefixes to be completed. More than one file can
+be specified in that way (i.e. the option can used more than once). In
+absence of this option, standard input is used.
+.TP
+.BI "\-l " language_file
+specifies a file that hold language specific information, i.e. (for now)
+characters that form words, and pairs of (lowercase, uppercase)
+characters for case conversion. If the option is not specified, latin
+letters with standard case conversions wil be used.
+
+Note: whether this information will be used or not depends on the module
+used for I/O handling (one_word_io or text_io).
+.TP
+.B \-v
+print version details.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid options, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+4
+Not enough memory.
+.TP
+5
+Possible cycle in the automaton detected.
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1)
+.I fsa_guess(1),
+.I fsa_guess(5),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_morph(5),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).
+.SH BUGS
+Send bug reports to the author: Jan Daciuk, jandac@pg.gda.pl.

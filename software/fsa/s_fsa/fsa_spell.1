@@ -1,0 +1,92 @@
+.TH fsa_spell 1 "Jul. 15th, 2004"
+.SH NAME
+fsa_spell - find words in dictionary or propose replacements
+.SH SYNOPSIS
+.B fsa_spell
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+.SH DESCRIPTION
+.B fsa_spell
+reads lines from the input. Each line contains one word. Every word
+is looked up in specified dictionaries. If the word is not found,
+similar words are listed. The degree of similarity is controlled by the
+edit distance option.
+.SH OPTIONS
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified. Dictionaries are automata built using
+.I fsa_build
+or
+.I fsa_ubuild.
+.TP
+.BI "\-e " edit_distance
+if the word is not in the dictionaries, look for words that lie within
+the specified distance. The edit distance is a number of basic editing
+operations needed to transform one string into another. Those operations
+are: inserting one character, deleting one character, changing one
+character, and transposing two adjacent characters.
+.TP
+.B "\-f "
+force search for replacement candidates (words within given edit
+distance) even if the word is in the dictionary. This may be useful in
+situations when an incorrect spelling of a word is identical to
+the correct spelling of another word. Use with caution.
+.TP
+.BI "\-i " input_file
+specifies a file with words to be corrected. More than one file can be
+specified in this way (i.e. the option can be used more than once). In
+absence of this option, standard input is used.
+.TP
+.BI "\-l " language_file
+specifies a file that holds language specific information, i.e. (for now)
+characters that form words, and pairs of (lowercase, uppercase)
+characters for case conversion. If the option is not specified, latin
+letters with standard case conversions wil be used.
+.TP
+.BI "\-r " character_class_file
+specifies a file that information about relation between single
+characters and two-character sequences. If a two-letter sounds the same
+as one (different) letter, that relation can be established in this
+file, and the replacement of the first with the second will be treated
+as being one edit distance unit apart. The first character of this file
+is a comment character - all lines beginning with it will be
+ignored. Data lines consist of two columns. Both columns specify
+either a single character or a two-character sequence, but the sum of
+the number of characters should be three. The first column specifies
+something that may (incorrectly) appear in text, the second one - the
+correct form.
+.TP
+.B \-v
+prints version details.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid option, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+4
+Not enough memory.
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1),
+.I fsa_guess(1),
+.I fsa_guess(5),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_morph(5),
+.I fsa_prefix(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).
+.SH BUGS
+Send bug reports to the author: Jan Daciuk, jandac@pg.gda.pl.

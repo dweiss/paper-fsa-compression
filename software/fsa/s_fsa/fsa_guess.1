@@ -1,0 +1,217 @@
+.TH fsa_guess 1 "Jul. 1st, 1999"
+.SH NAME
+fsa_guess - guess lexeme and categories of a word
+.SH SYNOPSIS
+.B fsa_guess
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+.SH DESCRIPTION
+.B fsa_guess
+reads lines from the input. Each line contains one word. For each
+word (inflected form), its probable categories are printed, based on
+the contents of a dictionary of (category, word ending) pairs. If the
+program has been compiled with GUESS_LEXEMES option, and the
+dictionary has been prepared accordingly, not only categories, but
+lexemes as well are printed. If the program has been compiled with
+GUESS_MMORPH option, and 
+.I \-m
+option has been given, morphological descriptions of words are printed.
+.SH OPTIONS
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified. Dictionaries are automata built using
+.I fsa_ubuild
+or
+.I fsa_build
+with \-X option. Data for the automata must be prepared in a special way.
+
+If the automata are to be used to predict only the categories, each line
+of the input to
+.I fsa_build
+should contain inverted word with the beginning (the end when inverted)
+of the word marked with the filler character, followed by an annotation
+separator, and followed by tags. See
+.I prep_atg.awk
+script available
+in the package.To treat such dictionaries
+.I fsa_guess
+should either
+.I not
+be compiled with GUESS_LEXEMES compile option, or it should be called
+with 
+.B \-p
+and 
+.B \-g
+options. The standard name
+extension for dictionaries prepared in this way is
+.I atg.
+
+If
+.I fsa_guess
+is to guess also lexemes, it must be compiled with GUESS_LEXEMES compile
+option, and the input to
+.I fsa_build
+must contain in each line: the inflected form, annotation separator,
+a code, lexeme ending, annotation separator, and tags (annotations).
+The code specifies how many characters from the end of the inflected
+form must be deleted before appending there the lexeme ending to get
+the lexeme. It is one character. To calculate the number, take the
+character code and substract 65 (character code for 'A') from it.
+See
+.I prep_atl.awk
+script available in the package. The standard name extension for
+automata prepared in this way is
+.I atl.
+
+To make
+.I fsa_guess
+take into account information included in prefixes, it must be compiled
+with GUESS_PREFIX. In data lines for
+.I fsa_build,
+the first annotation separator is replaced by two annotation separators
+for entries that do not contain prefixes, otherwise the prefix is
+deleted from the inverted inflected form leaving the filler
+character, and placed between the two annotation marks. The prefix is
+stored as is, i.e. not inverted. The standard name 
+extension for automata prepared in this way is
+.I atp.
+
+If 
+.I fsa_morph
+is to predict morphological descriptions for mmorph, it must be
+compiled with GUESS_MMORPH. To see whether 
+.I fsa_guess
+was compiled with that option, invoke it with
+.B \-v.
+The format for 
+.I fsa_build
+takes the format: 
+.I inverted_+K1e1+K2K3K4e2+a1+categories, 
+where
+.I inverted
+is an inverted inflected form, 
+.I K1
+is a character code describing how
+many characters should be deleted from the end of the inflected form
+(coded as explained above) in order to get the canonical form
+(possibly followed by an ending),
+.I e1
+is the ending that should be appended to the inflected form to obtain
+the lexeme (more precisely: the canonical or base form) after the
+ending of the inflected form has been stripped.
+. I K2
+is a character code describing how many characters should be deleted
+from the end of the canonical form (coded as explained above) in order
+to get the lexical form (possibly followed by an ending).
+.I K3 
+is a character code indicating the position of an archphoneme in
+the lexical form. If no archphoneme is present, the code is 'A'. 
+Otherwise the code is 'B' for the last character, 'C' -- for the
+penultimate one, and so on (after removal of K2 chars).
+.I K4
+says how many characters the archphoneme replaces. 'A' means 0, 'B' --
+1, etc. This code is present
+.I only
+when
+.I K3
+is not 'A', i.e. when there is an archphoneme.
+.I e2 is the ending of the lexical form; it should be appended to what
+is left from the canonical form after removing K2 characters from the
+end, and replacing some characters by an archphoneme if needed to
+obtain the lexical form.
+.I a1
+is the archphoneme (as specified in mmorph). '+' is the annotation
+separator. It is stored in the header of a dictionary, and can be
+specified as an option to 
+.I fsa_build.
+.TP
+.B \-g
+makes
+.I fsa_guess 
+work as if it were compiled without GUESS_LEXEMES. This
+option is available only if the program was compiled with GUESS_LEXEMES.
+The result is that the program assumes that the dictionaries do not
+contain information about lexemes (or more precisely, the canonical or
+base forms). Without this option 
+.I fsa_guess
+(when compiled with GUESS_LEXEMES) will try to guess lexemes, and it
+will assume that information about lexemes is included in the
+dictionaries. To see the compile options used to build
+.I fsa_guess
+call it with 
+.B \-v
+option.
+.TP
+.B \-p
+makes fsa_guess work as if it were compiled without GUESS_PREFIX. This
+option is avalaible only if the program is compiled with GUESS_PREFIX.
+The result is that the program assumes that the dictionaries do not
+contain information about prefixes. Without this option
+.I fsa_guess
+(when compiled without GUESS_LEXEMES) will try to use information
+about prefixes, and it will assume that such information is stored in
+the dictionaries. To see the compile options used to build fsa_guess,
+call it with
+.B \-v
+option.
+.TP
+.BI "\-i " input_file
+specifies an input file - file that contains words which categories
+should be guessed. More than one file can be specified (i.e. the option
+can be used more than once). In absence of \-i option, standard input is
+used.
+.TP
+.BI "\-l " language_file
+specifies a file that holds language specific information, i.e. (for now)
+characters that form words, and pairs of (lowercase, uppercase)
+characters for case conversion. If the option is not specified, latin
+letters with standard case conversions will be used.
+.TP
+.B \-m
+specifies that the dictionary contains information that makes it
+possible to predict mmorph entries (morphological descriptions) of
+unknown inflected forms.
+.I fsa_guess
+will take a word, and produce an entry for the Lexicon section of mmorph
+input data (see mmorph(5)). This option is only available when
+.I fsa_guess
+was compiled with GUESS_MMORPH compile option.
+.TP
+.B \-v
+print version details. This includes compile options used to build
+.I fsa_guess.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid options, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+4
+Not enough memory.
+.TP
+5
+Possible cycle in the automaton detected
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1),
+.I fsa_guess(5),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_morph(5),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).
+.SH BUGS
+Send bug reports to the author: Jan Daciuk, jandac@pg.gda.pl.

@@ -1,0 +1,96 @@
+.TH fsa_synth 5 "April 3rd, 2009"
+.SH NAME
+data format for fsa_synth - morphology synthesis program
+.SH DESCRIPTION
+.B fsa_morph
+performs morphological synthesis (generation) using one or more
+dictionaries in form of a finite-state automata. They are built using
+.I fsa_build
+or
+.I fsa_ubuild.
+Those programs accept data as lists of strings of characters, one
+string being one line of input. It is up to
+.I fsa_synth
+to interpret the data in the automaton. The strings are formated so
+that the morphological synthesis can be performed. The formats depend
+on characteristics of the language. There is one general format, but
+other formats make resulting automata smaller for certain classes of
+languages.
+.SH GENERAL FORMAT
+The general format is word+annotations+Kending, where
+.TP
+.B word
+is the canonical form that should be recognized and analysed when
+encountered.
+.B \+
+is the annotation separator (it can be changed to a different
+character using an option of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B annotations
+are normally the categories of the inflected form.
+.TP
+.B \+
+is the annotation separator.
+.TP
+.B K
+is a code that says how many characters to delete from the end of the
+canonical form. 
+.I A
+means 0,
+.I B
+means 1,
+.I C
+means 2, and so on.
+.TP 
+.B ending
+is the ending that should be appended to the canonical form after some
+characters from its end have been deleted in order to obtain the inflected
+form.
+.SH FORMAT WITH ENCODED PREFIXES
+For languages with prefixes, the general format can still be
+used. However, the format with coded prefixes may lead to smaller
+automata. In the format, a prefix, if it exists, precedes the deletion code.
+The format is:
+
+.B word+annotations+prefix+Kending,
+
+where the items known form the general format keep their meaning, and:
+.TP
+.B prefix
+is the (perhaps null) prefix.
+.SH FORMAT WITH ENCODED PREFIXES AND INFIXES
+For languages with infixes, the general format can still be
+used. However, the format with coded prefixes and infixes may lead to
+smaller automata. In the format, a possible prefix or infix is
+extracted and put in front of the K code, and the K code is also
+preceded with M code that codes the position of the prefix (M='A') or
+infix (M='B', 'C'...). M='A' means that the extracted part (perhaps
+null) is a prefix. M='B' means the infix should be inserted after the
+first character of the canonical form, M='C' - after the second one,
+and so on.
+The format is:
+
+.B word+annotations+prefix/infix+MKending, 
+
+where the items known form the general format keep their meaning, and
+.TP
+.B prefix/infix
+is either the prefix or infix or an empty string (when there is
+neither prefix nor infix).
+
+See the provided script: prep_geni.pl.
+.SH SEE ALSO
+.I fsa_synth(1),
+.I fsa_accent(1),
+.I fsa_build(1)
+.I fsa_guess(1),
+.I fsa_guess(5),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).

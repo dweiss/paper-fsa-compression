@@ -1,0 +1,23 @@
+# German language file.
+# Author: Jan Daciuk.
+#
+# The first character in this file is a comment character. It can be changed
+# without problems if the character used here (#) does not suit your needs.
+# Every line beginning with the comment character is not interpreted.
+#
+# Every character is represented by itself, i.e. the file is binary.
+#
+#
+# All characters used in German words. The order is not significant.
+# Note that they do not need to be all letters. There might be characters
+# like - and '.
+# This should be all in one line.
+abcdefghijklmnopqrstuvwxyzäëößüABCDEFGHIJKLMNOPQRSTUVWXYZÄËÖÜ
+#
+#
+# Pairs of letters. The first is in lowercase, the second one in uppercase.
+# If, for a character, there is no matching uppercase or lowercase one,
+# it should not be put here. The data is used for case conversion.
+# The order of pairs is not significant, the order in them is.
+# This should all be in one line.
+aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZäÄëËöÖüÜ

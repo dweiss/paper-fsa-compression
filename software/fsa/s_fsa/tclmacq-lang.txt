@@ -1,0 +1,289 @@
+# This file defines all names that appear in the morphology
+#  acquisition tool.
+# The format is as follows:
+# 1. Each line starting with the first character in this file is a comment
+#    (in this case it is `#', but it can be something else).
+# 2. Each line not having a space in the first column starts a new section.
+#    Section name appears on that line. It is the name of the language
+#    that is used in it.
+# 3. Each line having space as the first character has two fields
+#    a) the name of a variable
+#    b) the corresponding string
+%iso8859-2
+Polski
+  toolName	"Pozyskiwanie opisów morfologicznych"
+  fileName	pLik
+  fileU		1
+  cust		Dostosuj
+  custU		0
+  help		Pomoc
+  helpU		1
+  openGu	"Otwórz plik podpowiedzi"
+  openGuU	0
+  saveDesc	"Zapisz opisy"
+  saveDescU	0
+  tExit		Koniec
+  tExitU	0
+  lang		Jêzyk
+  langU		0
+  font		Czcionka
+  fontU		0
+  word		"S³owo:"
+  mmorphOut	"Rozwiniêcie przez mmorph:"
+  descr		"Opis:"
+  saveButt	Zachowaj
+  saveButtU	0
+  exitButt	Koniec
+  exitButtU	0
+  exitShort	"<M-KeyPress-k>"
+  saveShort	"<M-KeyPress-z>"
+  mmorphShort	"<M-KeyPress-m>"
+  fileShort	"<M-KeyPress-p>"
+  custShort	"<M-KeyPress-d>"
+  helpShort	"<M-KeyPress-o>"
+  removeShort	"<M-KeyPress-u>"
+  matchShort	"<M-KeyPress-w>"
+  loadShort	"<M-KeyPress-y>"
+  undoShort	"<M-KeyPress-c>"
+  replaceShort	"<M-KeyPress-a>"
+  fontName	"-*-helvetica-*-r-*-*-12-*-*-*-*-*-iso8859-2"
+  dnst		"Opisy nie zachowane"
+  dns		"Opisy nie zosta³y zachowane"
+  saveButtMsg	"Zachowaj"
+  dontSaveButtMsg "Nie zachowuj"
+  editButt	"Popraw"
+  editButtU	0
+  wordOpen	"czYtaj nowe"
+  wordOpenU	2
+  wordRemove	"Usuñ"
+  wordRemoveU	0
+  saveRemoves	"   Zapisanie usuwa:"
+  saveRAll	"wszystkie"
+  cacel		"Cofnij"
+  sortattlab	"skrypt porz±dkuj±cy"
+  mmorphLab	"wywo³anie mmorph"
+  morphdescLab	"plik z danymi dla mmorph"
+  guessSaveLab	"plik z pozosta³ymi podpowiedziami"
+  undoButt	"Cofnij"
+  undoButtU	0
+  simp		"   Upraszczaæ alternatywy:"
+  yes		"tak"
+  no		"nie"
+  matchButt	"Wybierz odmianê wg mmorph"
+  matchButtU	0
+  morphdescLab	"Plik wej¶ciowy dla programu mmorph"
+  paraLab	"Plik z nazwami pradygmatów"
+  add		"Dodaj"
+  delete	"Usuñ"
+  set		"Ustaw"
+  changePOS	"Zmieñ czê¶æ mowy"
+  replaceButt	"zAmiana"
+  replaceButtU	1
+%iso8859-1
+Francais
+  toolName	"Acquisition des descriptions morphologiques"
+  fileName	Fichier
+  fileU		0
+  cust		Personnaliser
+  custU		0
+  help		Assistance
+  helpU		0
+  openGu	"Ouvrir fichier de prévisions"
+  openGuU	0
+  saveDesc	"Sauvegarder descriptions"
+  saveDescU	0
+  tExit		Quitter
+  tExitU	0
+  lang		Langue
+  langU		0
+  font		"Police de charactères"
+  fontU		0
+  word		"Forme flechie:"
+  mmorphOut	"Expansion mmorph:"
+  descr		"Description:"
+  saveButt	Sauvegarder
+  saveButtU	0
+  exitButt	Quitter
+  exitButtU	0
+  exitShort	"<M-KeyPress-q>"
+  saveShort	"<M-KeyPress-s>"
+  mmorphShort	"<M-KeyPress-m>"
+  fileShort	"<M-KeyPress-f>"
+  custShort	"<M-KeyPress-p>"
+  helpShort	"<M-KeyPress-a>"
+  removeShort	"<M-KeyPress-e>"
+  matchShort	"<M-KeyPress-t>
+  loadShort	"<M-KeyPress-o>
+  undoShort	"<M-KeyPress-n>
+  replaceShort	"<M-KeyPress-r>"
+  fontName	"-*-helvetica-*-r-*-*-12-*-*-*-*-*-iso8859-1"
+  dnst		"Descriptions non sauvées"
+  dns		"Descriptions n'ont pas été sauvé"
+  editButt	"Corriger"
+  editButtU	0
+  wordOpen	"Ouvrir nouveau"
+  wordOpenU	0
+  wordRemove	"Effacer"
+  wordRemoveU	0
+  saveRemoves	"   Sauvegarder efface:"
+  saveRAll	"toutes"
+  cancel	"annuler"
+  sortatt	"script de triage"
+  mmorphLab	"invoquation de mmorph"
+  morphdescLab	"Fichier avec données pour mmorph"
+  guessSaveLab	"Fichier avec prévisions qui restent"
+  undoButt	"aNnuller"
+  undoButtU	1
+  simp		"  Simplifier des alternatifs:"
+  yes		"oui"
+  no		"non"
+  matchButt	"Trouver description selon mmorph"
+  matchButtU	0
+  morphdescLab	"Fichier avec des données pour mmorph"
+  paraLab	"Fichier avec les noms des paradigmes"
+  add		"Ajouter"
+  delete	"Supprimer"
+  set		"Mettre"
+  changePOS	"Changer partie du discurs"
+  replaceButt	"Remplacer"
+  replaceButtU	0
+%iso8859-1
+Deutsch
+  toolName	"Morphologische Datenbeschaffung"
+  fileName	Datei
+  fileU		0
+  cust		eInstellungen
+  custU		1
+  help		Hilfe
+  helpU		0
+  openGu	"Vermutungen öfnen"
+  openGuU	0
+  saveDesc	"Beschreibungen speichern"
+  saveDescU	0
+  tExit		Ende
+  tExitU	0
+  lang		Sprache
+  langU		0
+  font		Schrift
+  fontU		0
+  word		"Wort:"
+  mmorphOut	"Ausgabe von mmorph:"
+  descr		"Beschreibung:"
+  saveButt	Speichern
+  saveButtU	0
+  exitButt	Ende
+  exitButtU	0
+  exitShort	"<M-KeyPress-e>"
+  saveShort	"<M-KeyPress-s>"
+  mmorphShort	"<M-KeyPress-m>"
+  fileShort	"<M-KeyPress-d>"
+  custShort	"<M-KeyPress-i>"
+  helpShort	"<M-KeyPress-h>"
+  removeShort	"<M-KeyPress-l>"
+  matchShort	"<M-KeyPress-f>"
+  loadShort	"<M-KeyPress-n>"
+  undoShort	"<M-KeyPress-a>"
+  replaceShort	"<M-KeyPress-w>"
+  fontName	"-*-helvetica-*-r-*-*-12-*-*-*-*-*-iso8859-1"
+  dnst		"Beschreibungen nicht geschpeichert"
+  dns		"Beschreibungen nicht geschpeichert"
+  saveButtMsg	"Speichern"
+  dontSaveButtMsg "Nicht speichern"
+  editButt	"Korrigieren"
+  editButtU	0
+  wordOpen	"Neue öfnen"
+  wordOpenU	0
+  wordRemove	"Zerstören"
+  wordRemoveU	0
+  saveRemoves	"   Speichern löscht:"
+  saveRAll	"alle"
+  cancel	"nicht OK"
+  sortattlab	"Sortierskript"
+  mmorphLab	"Mmorph Anstossung"
+  morphdesclab	"Dateien für mmorph"
+  guessSaveLab	"Dateien mit übriggebliebenen Vermutungen"
+  undoButt	"Annulieren"
+  undoButtU	0
+  simp		"  Alternativen einfacher machen:"
+  yes		"ja"
+  no		"nein"
+  matchButt	"mmorph beschreibung Finden"
+  matchButtU	20
+  morphdescLab	"Dataien für mmorph"
+  paraLab	"Dataien mit Namen von Paradigmen"
+  add		"Zuschlagen"
+  delete	"Löschen"
+  set		"setzen"
+  changePOS	"POS wechseln"
+  replaceButt	"wechseln"
+  replaceButtU	0
+%iso8859-1
+Nederlands
+  toolName	"Morfologische Woordenboek Acquisitie"
+  fileName	Bestand
+  fileU		0
+  cust		Aanpassen
+  custU		0
+  help		Help
+  helpU		0
+  openGu	"Raden openen"
+  openGuU	0
+  saveDesc	"Beschrijving opslaan"
+  saveDescU	0
+  tExit		Einde
+  tExitU	0
+  lang		Taal
+  langU		0
+  font		Font
+  fontU		0
+  word		"Woord:"
+  mmorphOut	"Mmorph uitgang:"
+  descr		"Beschrijving:"
+  saveButt	Opslaan
+  saveButtU	0
+  exitButt	Einde
+  exitButtU	0
+  exitShort	"<M-KeyPress-e>"
+  saveShort	"<M-KeyPress-o>"
+  mmorphShort	"<M-KeyPress-m>"
+  fileShort	"<M-KeyPress-p>"
+  custShort	"<M-KeyPress-a>"
+  helpShort	"<M-KeyPress-h>"
+  removeShort	"<M-KeyPress-l>"
+  matchShort	"<M-KeyPress-v>"
+  loadShort	"<M-KeyPress-n>"
+  undoShort	"<M-KeyPress-u>"
+  replaceShort	"<M-KeyPress-w>"
+  fontName	"-*-helvetica-*-r-*-*-12-*-*-*-*-*-iso8859-1"
+  dnst		"Beschrijving niet opgeslagen"
+  dns		"Beschrijving niet opgeslagen"
+  saveButtMsg	"opslagen"
+  dontSaveButtMsg "Niet opslagen"
+  editButt	  "Korrigieren"
+  editButtU	  0
+  wordOpen	  "Nieuwe openen"
+  wordOpenU	  0
+  wordRemove	  "Löschen""
+  wordRemoveU	  0
+  saveRemoves	  "   Opslagen vernicht:"
+  saveRAll	  "alle"
+  cancel	  "terugkomen"
+  sortattLab	  "Sorteerskript"
+  mmorphLab	  "activatie mmorph"
+  morphdescLab	  "Gegevens voor mmorph"
+  guessSaveLab	  "gegevens met overige raden"
+  undoButt	  "annUleren"
+  undoButtU	  3
+  simp		  "  Alternativen einvoudig maken:"
+  yes		  "ja"
+  no		  "nee"
+  matchButt	  "mmorph omschrijving Vinden"
+  matchButtU	  20
+  morphdescLab	  "Gegevens voor mmorph"
+  paraLab	  "Gegevens met namen van paradigmen"
+  add		  "Toevoegen"
+  delete	  "Vernichten"
+  set		  "Zetten"
+  changePOS	  "POS wisselen"
+  replaceButt	  "Wisselen"
+  replaceButtU	  0

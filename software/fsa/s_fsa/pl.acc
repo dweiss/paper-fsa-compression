@@ -1,0 +1,35 @@
+# Polish diacritics.
+# Author: Jan Daciuk.
+#
+# The first character in this file is a comment character. It can be changed
+# without problems if the character used here (#) does not suit your needs.
+# Every line beginning with the comment character is not interpreted.
+#
+# In each data line, the first character is a latin character (i.e. without
+# diacritics). It is followed by one or more spaces, and then characters
+# that would be identical to the first character in the line if diacritics
+# were removed from them. There should be no spaces between those
+# characters.
+#
+# Every character is represented by itself, i.e. the file is binary.
+#
+#
+# lower case
+a ±
+c æ
+e ê
+l ³
+n ñ
+o ó
+s ¶
+z ¿¼
+#
+# upper case
+A ¡
+C Æ
+E Ê
+L £
+N Ñ
+O Ó
+S ¦
+Z ¯¬

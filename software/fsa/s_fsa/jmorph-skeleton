@@ -1,0 +1,14 @@
+#!/bin/sh
+# This is a skeleton script interface between emacs jspell.el module
+# and fsa utilities. It is badly written by Jan Daciuk, jandac@pg.gda.pl
+# Feel free to change it.
+#
+# This file is used to produce jmorph script by replacing XXX variables
+# with appropriate values from the Makefile.
+
+JMORPH_DICT_DIR=XXX_DICT_DIR
+JMORPH_CURR_DIR=`pwd`
+JMORPH_EXEC_DIR=XXX_EXEC_DIR
+cd ${JMORPH_DICT_DIR}
+${JMORPH_EXEC_DIR}/fsa_morph $@
+cd ${JMORPH_CURR_DIR}

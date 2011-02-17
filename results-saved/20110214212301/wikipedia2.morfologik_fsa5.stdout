@@ -1,0 +1,42 @@
+Assuming input is already sorted
+  0.75s, sequences: 1000000
+  1.22s, sequences: 2000000
+  1.65s, sequences: 3000000
+  2.32s, sequences: 4000000
+  2.91s, sequences: 5000000
+  3.40s, sequences: 6000000
+  4.24s, sequences: 7000000
+  4.68s, sequences: 8000000
+  5.22s, sequences: 9000000
+  5.75s, sequences: 10000000
+  6.32s, sequences: 11000000
+  7.97s, sequences: 12000000
+  8.83s, sequences: 13000000
+  9.79s, sequences: 14000000
+ 11.05s, sequences: 15000000
+ 11.98s, sequences: 16000000
+ 12.93s, sequences: 17000000
+ 14.07s, sequences: 18000000
+ 16.57s, sequences: 19000000
+ 17.55s, sequences: 20000000
+ 18.63s, sequences: 21000000
+ 19.97s, sequences: 22000000
+ 21.15s, sequences: 23000000
+ 22.25s, sequences: 24000000
+ 23.43s, sequences: 25000000
+ 24.43s, sequences: 26000000
+ 25.47s, sequences: 27000000
+ 26.68s, sequences: 28000000
+ 27.70s, sequences: 29000000
+ 28.82s, sequences: 30000000
+ 30.07s, sequences: 31000000
+ 31.18s, sequences: 32000000
+ 32.54s, sequences: 33000000
+ 36.01s, sequences: 34000000
+ 37.11s, sequences: 35000000
+ 38.95s, sequences: 36000000
+ 40.25s, sequences: 37000000
+ 41.91s, sequences: 38000000
+Building FSA...                        0.12 sec.  [ 42.06 sec.]
+Input sequences                  38,092,045
+Serializing FSA5...                   44.85 sec.  [ 86.91 sec.]

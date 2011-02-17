@@ -1,0 +1,533 @@
+.TH fsa_guess 5 "Jul. 1st, 1999"
+.SH NAME
+fsa_guess - guess lexeme and categories of a word
+.SH DESCRIPTION
+.B fsa_guess
+performs morphological analysis of unknown words, or guesses
+morphological descriptions of unknown words. In order to that, it uses
+dictionaries in form of finite-state automata. They are built with
+.I fsa_build
+or
+.I fsa_ubuild.
+Those programs accept strings of characters (one string per line) as
+their input. It is up to programs like fsa_guess to interpret those
+strings. The strings must contain information to be used by fsa_guess,
+and it must must be formated in a certain way in order to keep the
+automata small.
+.SH FORMAT FOR GUESSING ONLY CATEGORIES
+This format is used by
+.I fsa_guess
+either compiled without GUESS_LEXEMES, or called with
+.I \-A.
+
+The format is as follows:
+
+.B inverted+annotations
+
+where
+.TP
+.B inverted
+is an inverted inflected form.
+.TP
+.B \_
+is the filler character (it can be changed with the option -F of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B \+
+is an annotation separator (it can be changed with option
+.I \-A
+of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B annotations
+are annotations associated with the word (normally categories).
+
+The input data should be a list of inverted words with
+annotations. Each line should contain an inverted word (i.e. the first
+character should be the last character of the word, the second one \-
+the penultimate one, and so on. This inverted word should be followed
+immediately by a filler character and an annotation separator, and
+then by grammatical annotations. They specify some morphosyntactic
+properties of words, such as number, gender, etc.
+
+Assuming that a file
+.I file
+contains data in 3 columns: inflected word, canonical form, annotations,
+the following incantation:
+
+awk '{s="";for(i=1;i<=length($1);i++)s=substr($1,i,1) s;printf "%s_+%s\\n",s,$3;}' file | sort -u > file.idx
+
+prepares data for the a tergo index. The incantation should be all in
+one line. For more detail see the contents of
+.I prep_atg.awk
+file included
+in the distribution. The standard name extension for automata prepared
+in this way is
+.I atg.
+
+.SH FORMAT FOR GUESSING ONLY CATEGORIES WITH CODED PREFIXES AND/OR INFIXES
+This format is used by
+.I fsa_guess
+compiled with GUESS_PREFIX, and called with
+.I -P 
+or
+.I -I,
+and either compiled without GUESS_LEXEMES, or called with
+.I \-A.
+
+The format is as follows:
+
+.B verted_+prefix+annotations
+
+where:
+.TP
+.B verted
+is an inverted inflected form stripped off its prefix or infix and
+what preceded it. If the word has no prefix and no infix, it is just
+the inverted inflected form. E.g. in case of German "eingeladet", it
+is "tedal".
+.TP
+.B \_
+is the filler character (it can be changed with the option -F of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B \+
+is an annotation separator (it can be changed with option
+.I \-A
+of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B prefix
+is the prefix or infix and what precedes it. E.g. in case of 
+German "eingeladet", it is "einge", because the base form is "einladen", 
+and the infix is "ge".
+.TP
+.B annotations
+are annotations associated with the word (normally categories).
+
+.SH FORMAT FOR GUESSING CATEGORIES AND LEXEMES
+This format is used by
+.I fsa_guess
+compiled with GUESS_LEXEMES, and called without 
+.I \-P
+option.
+
+The format is as follows:
+
+.B inverted_+Kending+annotations
+
+where:
+.TP
+.B inverted
+is the inverted inflected form.
+.TP
+.B \_
+is the filler character (it can be changed with the option -F of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B \+
+is the annotation separator (it can be changed with an option of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B K
+is a code that says how many characters should be deleted from the end
+of the inflected form.
+.I A
+means no characters chould be deleted,
+.I B
+means one character,
+.I C
+means 2 characters, and so on.
+.TP
+.B ending
+is the ending of the canonical (or base) form. After deletion of
+characters as specified by
+.I K,
+the ending is appended to form the base form.
+
+For more detail see
+.I prep_atl.awk
+or
+.I prep_atl.pl
+files included in the distribution. The standard name
+extension for automata prepared in this way is
+.I atl.
+Note that the same format can be used for lemmatization. Just omit the
+final annotation separator and annotations.
+
+.SH FORMAT FOR GUESSING CATEGORIES AND LEXEMES WITH CODED PREFIXES
+This format is used by
+.I fsa_guess
+compiled with both GUESS_LEXEME, and GUESS_PREFIX, and called with
+.I \-P.
+
+The format is as follows:
+
+.B verted_+prefix+Kending+annotations
+
+where:
+.TP
+.B verted
+is the inverted inflected form with its prefix stripped (if
+it had one).
+.TP
+.B \_
+is the filler character (it can be changed with the option -F of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B \+
+is an annotation separator (it can be changed with option
+.I \-A
+of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B prefix
+is the prefix of the word. The prefix is not inverted. If the word has
+no prefix, then the prefix field is empty (there is nothing between
+two annotation separators). The meaning of the word
+.I prefix
+here is somewhat different from its linguistic meaning. It means a
+string of characters at the beginning of the inflected such that when
+it is deleted, the inflected form and the base form have a
+sufficiently long common prefix.
+
+For more detail, see provided scripts atl_prefix.awk and atl_prefix.pl.
+
+The standard name extension for automata prepared in this way is
+.I atp.
+
+.SH FORMAT FOR GUESSING CATEGORIES AND LEXEMES WITH CODED INFIXES
+This format is used by
+.I fsa_guess
+compiled with GUESS_PREFIX and GUESS_LEXEME, and invoked with
+.I \-I
+option.
+
+The format is as follows:
+
+.B verted_+prefix+IKending+annotations
+
+where:
+.TP
+.B verted
+is an inverted inflected form stripped off its prefix or infix and
+what preceded it. If the word has no prefix and no infix, it is just
+the inverted inflected form. E.g. in case of German "eingeladet", it
+is "tedal".
+.TP
+.B \_
+is the filler character (it can be changed with the option -F of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B \+
+is an annotation separator (it can be changed with option
+.I \-A
+of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B prefix
+is one of two things. It is either a prefix of the word, or it can be
+an infix and what precedes it. E.g. in case of 
+German "eingeladet", it is "einge", because the base form is "einladen", 
+and the infix is "ge".
+.TP
+.B I
+is a code that says how long is the infix.
+.I A
+means it is a prefix,
+.I B
+means the infix is one character long,
+.I C
+means the infix is two characters long, and so on. E.g. for the German
+word "eingeladet", the base form is "einladen", so the infix is "ge",
+its length is 2, and the character code \- "C". For another German
+word "gearbeitet", the base form is "arbeiten", so there is no infix
+(but there is a prefix), and the character code is "A".
+.B K
+is a code that says how many characters should be deleted from the end
+of the inflected form.
+.I A
+means no characters chould be deleted,
+.I B
+means one character,
+.I C
+means 2 characters, and so on.
+.TP
+.B annotations
+are annotations associated with the word (normally categories).
+
+
+
+.SH FORMAT FOR GUESSING MORPHOLOGICAL DESCRIPTIONS WITHOUT PREFIXES FOR MMORPH
+This format is used by
+.I fsa_guess
+compiled with GUESS_MMORPH, and invoked with
+.I \-m
+option. To see whether 
+.I fsa_guess
+was compiled with that option, invoke it with
+.I \-v.
+
+This format is used to predict morphological descriptions for mmorph.
+Each line for 
+.I fsa_build
+or
+.I fsa_ubuild
+for building an automaton to be used by
+.I fsa_guess
+takes the format: 
+
+.B inverted_+K1e1+K2K3K4e2+a1+categories, 
+
+where
+.TP
+.B inverted
+is an inverted inflected form, 
+.TP
+.B K1
+is a character code describing how
+many characters should be deleted from the end of the inflected form
+(coded as explained above) in order to get the canonical form
+(possibly followed by an ending),
+.TP
+.B e1
+is the ending that should be appended to the inflected form to obtain
+the lexeme (more precisely: the canonical or base form) after the
+ending of the inflected form has been stripped.
+.TP
+.B K2
+is a character code describing how many characters should be deleted
+from the end of the canonical form (coded as explained above) in order
+to get the lexical form (possibly followed by an ending).
+.TP
+.B K3 
+is a character code indicating the position of an archphoneme in
+the lexical form. If no archphoneme is present, the code is 'A'. 
+Otherwise the code is 'B' for the first character, 'C' -- for the
+second one, and so on. Archiphonemes have to be treated in this way
+only when they appear towards the beginning of the lexical form. Use
+the supplied
+. I gendata.pl
+perl script to obtain the coding.
+.TP
+.B K4
+says how many characters the archphoneme replaces. 'A' means 0, 'B' --
+1, etc. This code is present
+.I only
+when
+.I K3
+is not 'A', i.e. when there is an archphoneme.
+.TP
+.B e2
+is the ending of the lexical form; it should be appended to what
+is left from the canonical form after removing K2 characters from the
+end, and replacing some characters by an archphoneme if needed to
+obtain the lexical form.
+.TP
+.B a1
+is the archphoneme (as specified in mmorph).
+.TP
+.B '+'
+is the annotation
+separator. It is stored in the header of a dictionary, and can be
+specified as an option to 
+.I fsa_build.
+
+
+
+
+.SH FORMAT FOR GUESSING MORPHOLOGICAL DESCRIPTIONS WITH PREFIXES FOR MMORPH
+This format is used by
+.I fsa_guess
+compiled with GUESS_MMORPH, and invoked with
+.I \-m
+and
+.I \-P
+options. To see whether 
+.I fsa_guess
+was compiled with that compile option, invoke it with
+.I \-v.
+
+This format is used to predict morphological descriptions for mmorph.
+Each line for 
+.I fsa_build
+or
+.I fsa_ubuild
+for building an automaton to be used by
+.I fsa_guess
+takes the format: 
+
+.B verted_+prefix+K1e1+K2K3K4e2+a1+categories, 
+
+where
+.TP
+.B verted
+is an inverted inflected form (without possible prefix), 
+.TP
+.B prefix
+is the prefix of the inflected form,
+.TP
+.B K1
+is a character code describing how
+many characters should be deleted from the end of the inflected form
+(coded as explained above) in order to get the canonical form
+(possibly followed by an ending),
+.TP
+.B e1
+is the ending that should be appended to the inflected form to obtain
+the lexeme (more precisely: the canonical or base form) after the
+ending of the inflected form has been stripped.
+.TP
+.B K2
+is a character code describing how many characters should be deleted
+from the end of the canonical form (coded as explained above) in order
+to get the lexical form (possibly followed by an ending).
+.TP
+.B K3 
+is a character code indicating the position of an archphoneme in
+the lexical form. If no archphoneme is present, the code is 'A'. 
+Otherwise the code is 'B' for the first character, 'C' -- for the
+second one, and so on. Archiphonemes have to be treated in this way
+only when they appear towards the beginning of the lexical form. Use
+the supplied
+. I gendata.pl
+perl script to obtain the coding.
+.TP
+.B K4
+says how many characters the archphoneme replaces. 'A' means 0, 'B' --
+1, etc. This code is present
+.I only
+when
+.I K3
+is not 'A', i.e. when there is an archphoneme.
+.TP
+.B e2
+is the ending of the lexical form; it should be appended to what
+is left from the canonical form after removing K2 characters from the
+end, and replacing some characters by an archphoneme if needed to
+obtain the lexical form.
+.TP
+.B a1
+is the archphoneme (as specified in mmorph). 
+.TP
+.B '+' 
+is the annotation
+separator. It is stored in the header of a dictionary, and can be
+specified as an option to 
+.I fsa_build.
+
+
+.SH FORMAT FOR GUESSING MORPHOLOGICAL DESCRIPTIONS WITH PREFIXES AND INFIXES FOR MMORPH
+This format is used by
+.I fsa_guess
+compiled with GUESS_MMORPH, and invoked with
+.I \-m
+and
+.I \-I
+options. To see whether 
+.I fsa_guess
+was compiled with that compile option, invoke it with
+.I \-v.
+
+This format is used to predict morphological descriptions for mmorph.
+Each line for 
+.I fsa_build
+or
+.I fsa_ubuild
+for building an automaton to be used by
+.I fsa_guess
+takes the format: 
+
+.B verted_+prefixinfix+IK1e1+K2K3K4e2+a1+categories, 
+
+where
+.TP
+.B verted
+is an inverted inflected form (with possible prefix and infix removed), 
+.TP
+.B prefixinfix
+is the prefix, or a concatenation of the prefix and the infix,
+.TP
+.B I
+is the length of the infix, where 'A' means no infix, 'B' means 1, 'C'
+means 2, and so on,
+.TP
+.B K1
+is a character code describing how
+many characters should be deleted from the end of the inflected form
+(coded as explained above) in order to get the canonical form
+(possibly followed by an ending),
+.TP
+.B e1
+is the ending that should be appended to the inflected form to obtain
+the lexeme (more precisely: the canonical or base form) after the
+ending of the inflected form has been stripped.
+.TP
+.B K2
+is a character code describing how many characters should be deleted
+from the end of the canonical form (coded as explained above) in order
+to get the lexical form (possibly followed by an ending).
+.TP
+.B K3 
+is a character code indicating the position of an archphoneme in
+the lexical form. If no archphoneme is present, the code is 'A'. 
+Otherwise the code is 'B' for the first character, 'C' -- for the
+second one, and so on. Archiphonemes have to be treated in this way
+only when they appear towards the beginning of the lexical form. Use
+the supplied
+. I gendata.pl
+perl script to obtain the coding.
+.TP
+.B K4
+says how many characters the archphoneme replaces. 'A' means 0, 'B' --
+1, etc. This code is present
+.I only
+when
+.I K3
+is not 'A', i.e. when there is an archphoneme.
+.TP
+.B e2
+is the ending of the lexical form; it should be appended to what
+is left from the canonical form after removing K2 characters from the
+end, and replacing some characters by an archphoneme if needed to
+obtain the lexical form.
+.TP
+.B a1
+is the archphoneme (as specified in mmorph). 
+.TP
+.B '+' 
+is the annotation
+separator. It is stored in the header of a dictionary, and can be
+specified as an option to 
+.I fsa_build.
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1),
+.I fsa_guess(1),
+.I fsa_hash(1),
+.I fsa_morph(1),
+.I fsa_morph(5),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).

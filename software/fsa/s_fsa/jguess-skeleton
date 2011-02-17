@@ -1,0 +1,14 @@
+#!/bin/sh
+# This is a skeleton script interface between emacs jspell.el module
+# and fsa utilities. It is badly written by Jan Daciuk, jandac@pg.gda.pl
+# Feel free to change it.
+#
+# This file is used to produce jguess script by replacing XXX variables
+# with appropriate values from the Makefile.
+
+JGUESS_DICT_DIR=XXX_DICT_DIR
+JGUESS_CURR_DIR=`pwd`
+JGUESS_EXEC_DIR=XXX_EXEC_DIR
+cd ${JGUESS_DICT_DIR}
+${JGUESS_EXEC_DIR}/fsa_guess $@
+cd ${JGUESS_CURR_DIR}

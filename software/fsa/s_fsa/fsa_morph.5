@@ -1,0 +1,121 @@
+.TH fsa_morph 5 "Oct. 15st, 1999"
+.SH NAME
+data format for fsa_morph - morphology analysis program
+.SH DESCRIPTION
+.B fsa_morph
+performs morphological analysis using one or more dictionaries in form
+of a finite-state automata. They are built using
+.I fsa_build
+or
+.I fsa_ubuild.
+Those programs accept data as lists of strings of characters, one
+string being one line of input. It is up to
+.I fsa_morph
+to interpret the data in the automaton. The strings are formated so
+that the morphological analysis can be performed. The formats depend
+on characteristics of the language. There is one general format, but
+other formats make resulting automata smaller for certain classes of
+languages.
+.SH GENERAL FORMAT
+The general format is word+Kending+annotations, where
+.TP
+.B word
+is the inflected form that should be recognized and analysed when
+encountered.
+.B \+
+is the annotation separator (it can be changed to a different
+character using an option of
+.I fsa_build
+or
+.I fsa_ubuild).
+.TP
+.B K
+is a code that says how many characters to delete from the end of the
+inflected form. 
+.I A
+means 0,
+.I B
+means 1,
+.I C
+means 2, and so on.
+.TP 
+.B ending
+is the ending that should be appended to the inflected form after some
+characters from its end have been deleted in order to obtain the base
+form (the canonical form).
+.TP
+.B \+
+is the annotation separator.
+.TP
+.B annotations
+are normally the categories of the inflected form.
+.SH IMPOVERISHED FORMAT
+This format can be used if fsa_morph has been compiled with POOR_MORPH
+compile option. Then you can use -A runtime option of fsa_morph. This
+format makes it possible to obtain only categories, and not base
+forms, for given inflected forms. It does not contain the information
+about the base form, i.e. the +Kending part, so it is only
+word+annotations
+.SH FORMAT WITH ENCODED PREFIXES
+For languages with prefixes, the general format can still be
+used. However, the format with coded prefixes may lead to smaller
+automata. The format contains an additional character that codes the
+number of characters to be deleted from the beginning of the word. The
+format is:
+
+.B word+LKending+annotations,
+
+where the items known form the general format keep their meaning, and:
+.TP
+.B L
+is the code, with
+.I A
+meaning there is nothing to be deleted at the beginning,
+.I B
+meaning there is 1 character to be deleted,
+.I C
+- 2, etc.
+.SH FORMAT WITH ENCODED PREFIXES AND INFIXES
+For languages with infixes, the general format can still be
+used. However, the format with coded prefixes and infixes may lead to
+smaller automata. The format contains two additional characters that
+code how many characters to delete, and the position of those
+characters at the beginning of the inflected form. The format is
+
+.B word+KLMending+annotations, 
+
+where the items known form the general format keep their meaning, and
+.TP
+.B K
+informs about the position from the beginning of the inflected form
+where some characters should be deleted.
+.I A
+means the characters are at the beginning of the word (it is a
+prefix),
+.I B
+means the characters to be deleted start at the second character of
+the word,
+.I C
+- the second one, and so on.
+.TP
+.B L
+says how many characters to delete.
+.I A
+means none,
+.I B
+means one
+.I C
+means 3, and so on.
+
+See provided scripts: morph_infix.pl and morph_infix.awk.
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1)
+.I fsa_guess(1),
+.I fsa_guess(5),
+.I fsa_hash(1),
+.I fsa_morph(5),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).

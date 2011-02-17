@@ -1,0 +1,148 @@
+.TH fsa_synth 1 "17th August, 2010"
+.SH NAME
+fsa_synth - perform morphological synthesis of inflected forms
+.SH SYNOPSIS
+.B fsa_synth
+[
+.I options
+] [
+.I <infile
+] [
+.I >outfile
+]
+.SH DESCRIPTION
+.B fsa_synth
+reads lines from the input. Each line contains a pair: a canonical
+form and tags. They are separated with white spaces. All
+inflected forms from the dictionary that match the tags are
+printed.
+.SH OPTIONS
+.TP
+.BI "\-d " dictionary
+use that dictionary.  Several dictionaries may be given.  At least one
+dictionary must be specified. Dictionaries are automata built using
+.I fsa_ubuild
+or
+.I fsa_build.
+The data for them must be prepared in a special way. Each line of data
+consists of the canonical form, followed by a separator, followed by a
+code K, followed by the ending of the lexeme, followed by the separator,
+followed by tags. The code K specifies how many characters from the end of
+the inflected form are different from last characters of the lexeme
+(i.e. how many characters constitute the inflected word ending). 'A'
+means that no characters are to be rejected, 'B' \- 1, 'C' \- 2, and so
+on. Though the data is different from the normal word list format, the
+automaton is the same (its content is different), so the magic number is
+the same as with the normal data.
+.TP
+.BI "\-i " input_file
+specifies an input file - file that contains words that should be
+analysed. More than one file can be specified (i.e. the option 
+can be used more than once). In absence of \-i option, standard input is
+used.
+.TP
+.B \-P
+indicates that the dictionary contains coded prefixes (see
+.I fsa_synth(5)).
+.TP
+.B \-I
+indicates that the dictionary contains coded infixes (see
+.I fsa_synth(5)).
+.TP
+.B \-a
+generate all surface forms for the given lexical form (no tags should
+be given)
+.TP
+.B \-r
+indicates that the tags are given as regular expressions. A regular
+expression is:
+.RS
+.TP
+.I a
+any normal character (it means itself). Any special character (see
+below) should be escaped with a backslash.
+.TP
+.I .
+means any character.
+.TP
+.I [ab]
+means any of the characters given inside brackets (no commas nor
+vertical bars are needed to separate the characters - they would
+represent themselves). A circumflex (^) immediately after the opening
+bracket means complementation, i.e. the expression in brackets will
+match a character that is not any of the characters listed after the
+circumflex. Ranges of characters may be given, i.e. a-z means all
+characters with codes not smaller than the code of a, and not greater than the
+code of z. The character preceding the dash must have a smaller code
+than the character following the dash.
+.TP
+.I (a)
+means
+.I a.
+Parentheses can be used for grouping.
+.TP
+.I ab
+concatenation of
+.I a 
+and 
+.I b
+.TP
+.I a|b
+either
+.I a
+or
+.I b
+.TP
+.I a*
+means
+.I a
+appearing any number of times (including 0).
+.TP
+.I a+
+means
+.I aa*
+.TP
+.I a?
+means optional
+.I a
+, i.e. an
+.I a
+that may appear 0 or 1 time.
+.RE
+.TP
+.B \-v
+print version details, including compile options used to build the program.
+.SH EXIT STATUS
+.TP
+0
+OK
+.TP
+1
+Invalid options, or lack of a required option.
+.TP
+2
+Dictionary file could not be opened.
+.TP
+3
+Invalid regular expression.
+.TP
+4
+Not enough memory.
+.TP
+5
+Invalid UTF8 character.
+.TP
+6
+Error in determinization (transitions not grouped for source states).
+.SH SEE ALSO
+.I fsa_accent(1),
+.I fsa_build(1),
+.I fsa_guess(1),
+.I fsa_hash(1),
+.I fsa_morph(5),
+.I fsa_prefix(1),
+.I fsa_spell(1),
+.I fsa_ubuild(1),
+.I fsa_visual(1).
+.SH BUGS
+Send bug reports to the author: Jan Daciuk, jandac@eti.pg.gda.pl.

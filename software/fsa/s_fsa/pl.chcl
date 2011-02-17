@@ -1,0 +1,41 @@
+# pl.chcl - character classes for spelling correction in Polish
+#
+# This file is intended to be used with the 0.7 version of fsa_spell.
+# See fsa_spell(1) for details.
+#
+# The first character of this file is a comment character.
+# Every line beginning with that character is treated as a comment,
+# i.e., it is ignored.
+#
+# Each data line should contain two columns. In the current (0.7)
+# version, each column should contain one or two characters. The sum of
+# the number of characters in both columns should give 3. The columns
+# should be separated by spaces and/or tabs.
+# The first column specifies a character sequence (possibly one
+# character) that may occur in text instead of the character sequence
+# (possibly one character) in the second column.
+# Do not write anything behind the second column. That place is reserved
+# for future cost of replacement.
+#
+# This file is binary, i.e. characters should be represented by
+# themselves.
+# Here comes the data for Polish
+rz	¿
+¿	rz
+# Please note that with the invention in Poland of a disease called
+# "disorthography", there is a number of completely new "variations" of
+# Polish spelling depending on the number of hours the patients watched
+# TV instead of reading. These include:
+# ±	on
+# ±	o³
+# ±	om
+# on	±
+# o³	±
+# om	±
+# ê	en
+# ê	em
+# (The list is far from being exhaustive.)
+# You may find it necessary to uncomment the above lines.
+# Please note that the longer the list, the slower the program.
+#
+# EOF pl.chcl
