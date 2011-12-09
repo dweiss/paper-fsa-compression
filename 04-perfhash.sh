@@ -4,10 +4,11 @@ SOFTWARE=software
 
 TIME_CMD=/usr/bin/time
 TIME_FMT="wall\t%e\t%E\tuser\t%U\tsys\t%S\tmax-mem-kb\t%M\tdta\t%D\tinputs\t%I\toutputs\t%O"
+JAVA_OPTS="-server -Xmx4g"
 
 function morfologik_cfsa2 {
   $TIME_CMD -f $TIME_FMT -o $2.log \
-  java -server -Xmx2024m -jar $SOFTWARE/morfologik-perfhashing/morfologik-tools-1.5.3-SNAPSHOT-standalone.jar \
+  java $JAVA_OPTS -jar $SOFTWARE/morfologik-perfhashing/morfologik-tools-1.5.3-SNAPSHOT-standalone.jar \
     fsa_build \
        --format cfsa2 \
        --progress \
@@ -17,7 +18,7 @@ function morfologik_cfsa2 {
 
 function morfologik_cfsa2_numvint {
   $TIME_CMD -f $TIME_FMT -o $2.log \
-  java -server -Xmx2024m -jar $SOFTWARE/morfologik-perfhashing/morfologik-tools-1.5.3-SNAPSHOT-standalone.jar \
+  java $JAVA_OPTS -jar $SOFTWARE/morfologik-perfhashing/morfologik-tools-1.5.3-SNAPSHOT-standalone.jar \
     fsa_build \
        --format cfsa2 \
        --progress \
@@ -28,7 +29,7 @@ function morfologik_cfsa2_numvint {
 
 function morfologik_cfsa2_numfixed {
   $TIME_CMD -f $TIME_FMT -o $2.log \
-  java -server -Xmx2024m -jar $SOFTWARE/morfologik-perfhashing/morfologik-tools-1.5.3-patched.jar \
+  java $JAVA_OPTS -jar $SOFTWARE/morfologik-perfhashing/morfologik-tools-1.5.3-patched.jar \
     fsa_build \
        --format cfsa2 \
        --progress \

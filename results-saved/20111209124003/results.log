@@ -70,3 +70,6 @@ data-sets/weiss/streets2.dict	morfologik_cfsa2_numfixed	154154	wall	1.33	0:01.33
 data-sets/weiss/pl.dict	morfologik_cfsa2	1889235	wall	20.79	0:20.79	user	21.22	sys	0.33	max-mem-kb	282864	dta	0	inputs	323768	outputs	3776
 data-sets/weiss/pl.dict	morfologik_cfsa2_numvint	2230998	wall	24.04	0:24.04	user	24.66	sys	0.27	max-mem-kb	294336	dta	0	inputs	0	outputs	4440
 data-sets/weiss/pl.dict	morfologik_cfsa2_numfixed	2849337	wall	23.13	0:23.13	user	23.73	sys	0.22	max-mem-kb	298864	dta	0	inputs	0	outputs	5648
+data-sets/weiss/wikipedia2.dict	morfologik_cfsa2	189132938	wall	686.11	11:26.11	user	0.00	sys	0.00	max-mem-kb	255744	dta	0	inputs	0	outputs	0
+data-sets/weiss/wikipedia2.dict	morfologik_cfsa2_numvint	228799322	wall	988.95	16:28.95	user	0.00	sys	0.01	max-mem-kb	256000	dta	0	inputs	0	outputs	0
+data-sets/weiss/wikipedia2.dict	morfologik_cfsa2_numfixed	348743331	wall	917.09	15:17.09	user	0.00	sys	0.01	max-mem-kb	255744	dta	0	inputs	0	outputs	0 
