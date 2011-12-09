@@ -1,3 +1,5 @@
 *~
 results
 *.dict
+data-sets/weiss/streets.fsa
+data-sets/weiss/streets2.fsa
