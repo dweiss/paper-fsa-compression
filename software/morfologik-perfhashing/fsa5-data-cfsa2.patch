@@ -1,0 +1,167 @@
+diff --git a/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2.java b/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2.java
+index 6955da4..7ab2cb7 100644
+--- a/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2.java
++++ b/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2.java
+@@ -151,6 +151,8 @@ public final class CFSA2 extends FSA {
+ 	 */
+ 	private final int epsilon = 0;
+ 
++    private byte nodeDataLength;
++
+ 	/**
+ 	 * Reads an automaton from a byte stream.
+ 	 */
+@@ -177,6 +179,9 @@ public final class CFSA2 extends FSA {
+ 		    throw new IOException("Unrecognized flags remained: 0x" + Integer.toHexString(flagBits));
+ 
+ 		this.hasNumbers = flags.contains(FSAFlags.NUMBERS);
++		if (hasNumbers) {
++		    nodeDataLength = FileUtils.readByte(in);
++		}
+ 
+ 		/*
+ 		 * Read mapping dictionary.
+@@ -205,11 +210,7 @@ public final class CFSA2 extends FSA {
+      */
+ 	@Override
+ 	public final int getFirstArc(int node) {
+-	    if (hasNumbers) {
+-	        return skipVInt(node);
+-	    } else {
+-	        return node;
+-	    }
++	    return nodeDataLength + node;
+ 	}
+ 
+ 	/**
+@@ -267,7 +268,7 @@ public final class CFSA2 extends FSA {
+ 	@Override
+ 	public int getRightLanguageCount(int node) {
+         assert getFlags().contains(FSAFlags.NUMBERS): "This FSA was not compiled with NUMBERS.";
+-	    return readVInt(arcs, node);
++        return decodeFromBytes(arcs, node, nodeDataLength);
+     }
+ 
+ 	/**
+@@ -401,4 +402,17 @@ public final class CFSA2 extends FSA {
+         while (arcs[offset++] < 0);
+         return offset;
+     }
++    
++    /**
++     * Returns an n-byte integer encoded in byte-packed representation.
++     */
++    static final int decodeFromBytes(
++            final byte[] arcs, final int start, final int n)
++    {
++        int r = 0;
++        for (int i = n; --i >= 0;) {
++            r = r << 8 | (arcs[start + i] & 0xff);
++        }
++        return r;
++    }    
+ }
+\ No newline at end of file
+diff --git a/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2Serializer.java b/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2Serializer.java
+index 8026f33..ba9eeae 100644
+--- a/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2Serializer.java
++++ b/morfologik-fsa/src/main/java/morfologik/fsa/CFSA2Serializer.java
+@@ -86,7 +86,9 @@ public final class CFSA2Serializer implements FSASerializer {
+     /**
+      * Logger for progress.
+      */
+-    private IMessageLogger logger = new NullMessageLogger(); 
++    private IMessageLogger logger = new NullMessageLogger();
++
++    private int nodeDataLength; 
+ 
+     /**
+      * Serialize the automaton with the number of right-language sequences in
+@@ -117,8 +119,19 @@ public final class CFSA2Serializer implements FSASerializer {
+          * Calculate the number of bytes required for the node data, if
+          * serializing with numbers.
+          */
++        nodeDataLength = 0;
+         if (withNumbers) {
+             this.numbers = FSAUtils.rightLanguageForAllStates(fsa);
++            
++            /*
++             * Calculate the number of bytes required for the node data, if
++             * serializing with numbers.
++             */
++            int maxNumber = numbers.get(fsa.getRootNode());
++            while (maxNumber > 0) {
++                nodeDataLength++;
++                maxNumber >>>= 8;
++            }
+         }
+ 
+         /*
+@@ -136,6 +149,10 @@ public final class CFSA2Serializer implements FSASerializer {
+         if (withNumbers) fsaFlags.add(NUMBERS);
+         FileUtils.writeShort(os, FSAFlags.asShort(fsaFlags));
+ 
++        if (withNumbers) {
++            os.write(nodeDataLength);
++        }
++
+         /*
+          * Emit labels index.
+          */
+@@ -511,16 +528,14 @@ public final class CFSA2Serializer implements FSASerializer {
+ 
+     /** */
+     private int emitNodeData(OutputStream os, int number) throws IOException {
+-        int size = 0;
+-
+-        if (withNumbers) {
+-            size = CFSA2.writeVInt(scratch, 0, number);
+-            if (os != null) {
+-                os.write(scratch, 0, size);
++        if (nodeDataLength > 0 && os != null) {
++            for (int i = 0; i < nodeDataLength; i++) {
++                os.write(number);
++                number >>>= 8;
+             }
+         }
+ 
+-        return size;
++        return nodeDataLength;
+     }
+ 
+     /** */
+diff --git a/morfologik-fsa/src/test/java/morfologik/fsa/SerializerTestBase.java b/morfologik-fsa/src/test/java/morfologik/fsa/SerializerTestBase.java
+index ce373ba..b96ebae 100644
+--- a/morfologik-fsa/src/test/java/morfologik/fsa/SerializerTestBase.java
++++ b/morfologik-fsa/src/test/java/morfologik/fsa/SerializerTestBase.java
+@@ -139,14 +139,6 @@ public abstract class SerializerTestBase {
+         testBuiltIn(FSA.read(FSA5Test.class.getResourceAsStream("minimal2.fsa")));
+     }
+ 
+-    /**
+-     * 
+-     */
+-    @Test
+-    public void test_en_tst() throws IOException {
+-        testBuiltIn(FSA.read(FSA5Test.class.getResourceAsStream("en_tst.dict")));
+-    }
+-
+     private void testBuiltIn(FSA fsa) throws IOException {
+         final ArrayList<byte[]> sequences = new ArrayList<byte[]>();
+ 
+@@ -249,6 +241,15 @@ public abstract class SerializerTestBase {
+                 result);
+     }
+ 
++
++    /**
++     * 
++     */
++    @Test
++    public void test_en_tst() throws IOException {
++        testBuiltIn(FSA.read(FSA5Test.class.getResourceAsStream("en_tst.dict")));
++    }
++
+     /**
+      * 
+      */
