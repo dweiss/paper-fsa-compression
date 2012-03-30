@@ -1,0 +1,56 @@
+Assuming input is already sorted
+Building FSA...                        0.01 sec.  [  0.01 sec.]
+Input sequences                          31
+Warning: input contained carriage returns?
+Statistics...                          0.00 sec.  [  0.02 sec.]
+Nodes                                    28
+Arcs                                     58
+Tail nodes                               15
+States with the given # of outgoing arcs:
+  #1                                     15
+  #2                                      4
+  #3                                      5
+  #4                                      1
+  #5                                      1
+  #6                                      0
+  #7                                      0
+  #8                                      0
+  #9                                      0
+  #10                                     1
+FSA builder properties:
+Serialization buffer size         5,242,880
+Serialization buffer reallocs             1
+Constant arc FSA size                 9,564
+Max active path                           6
+Registry hash slots                      32
+Registry hash entries                    16
+Estimated mem consumption (MB)  5.0001220703125
+est. number storage                      32
+Serializing CFSA2...          
+Label distribution...         
+0x4f                                      6
+0x49                                      5
+0x52                                      5
+0x54                                      5
+0xd                                       4
+0x41                                      4
+0x45                                      4
+0x48                                      4
+0x4e                                      4
+0x53                                      3
+0x44                                      2
+0x46                                      2
+0x55                                      2
+0x59                                      2
+0x42                                      1
+0x43                                      1
+0x4d                                      1
+0x56                                      1
+0x57                                      1
+Label distribution...                  0.00 sec.  [  0.03 sec.]
+Compacting...                 
+Initial output size                     108
+Moved 3 states, output size             110
+Will move 0 states, final size          108
+Compacting...                          0.00 sec.  [  0.03 sec.]
+Serializing CFSA2...                   0.01 sec.  [  0.03 sec.]

@@ -1,0 +1,205 @@
+Assuming input is already sorted
+  2.20s, sequences: 1000000
+  5.30s, sequences: 2000000
+Building FSA...                        0.02 sec.  [  7.48 sec.]
+Input sequences                   2,744,641
+Warning: input contained carriage returns?
+Statistics...                          1.34 sec.  [  8.83 sec.]
+Nodes                             5,715,341
+Arcs                              8,459,981
+Tail nodes                        1,496,921
+States with the given # of outgoing arcs:
+  #1                              4,429,372
+  #2                                848,215
+  #3                                188,520
+  #4                                 78,635
+  #5                                 45,044
+  #6                                 21,542
+  #7                                 15,526
+  #8                                 12,550
+  #9                                 20,702
+  #10                                25,207
+  #11                                10,212
+  #12                                 3,162
+  #13                                 2,475
+  #14                                 2,065
+  #15                                 2,030
+  #16                                 1,483
+  #17                                 1,259
+  #18                                 1,221
+  #19                                   941
+  #20                                   931
+  #21                                   731
+  #22                                   616
+  #23                                   466
+  #24                                   428
+  #25                                   367
+  #26                                   757
+  #27                                   184
+  #28                                   160
+  #29                                   114
+  #30                                    86
+  #31                                    44
+  #32                                    40
+  #33                                    33
+  #34                                    24
+  #35                                    32
+  #36                                    19
+  #37                                    18
+  #38                                    13
+  #39                                    19
+  #40                                    19
+  #41                                    11
+  #42                                     4
+  #43                                     7
+  #44                                     3
+  #45                                     8
+  #46                                    19
+  #47                                     3
+  #48                                     6
+  #49                                     4
+  #50                                     0
+  #51                                     1
+  #52                                     4
+  #53                                     2
+  #54                                     0
+  #55                                     2
+  #56                                     0
+  #57                                     0
+  #58                                     3
+  #59                                     1
+FSA builder properties:
+Serialization buffer size        52,428,800
+Serialization buffer reallocs            10
+Constant arc FSA size            51,059,406
+Max active path                         195
+Registry hash slots               4,194,304
+Registry hash entries             1,496,922
+Estimated mem consumption (MB)         66.0
+est. number storage               2,744,642
+Serializing CFSA2...          
+Label distribution...         
+0x65                                472,968
+0x2e                                445,673
+0x61                                362,080
+0x69                                360,266
+0x74                                355,191
+0x73                                346,792
+0x6f                                313,830
+0x63                                309,796
+0x72                                299,786
+0x2d                                288,145
+0x70                                269,792
+0x6c                                261,866
+0x64                                249,226
+0x31                                245,829
+0x6e                                239,216
+0x2f                                226,347
+0x30                                204,676
+0x32                                203,484
+0x6d                                201,118
+0x68                                157,367
+0x67                                140,540
+0x33                                139,591
+0x66                                131,663
+0x75                                131,505
+0x62                                126,230
+0xd                                 114,830
+0x5f                                112,426
+0x34                                109,314
+0x6b                                 99,833
+0x35                                 96,295
+0x39                                 93,956
+0x36                                 91,987
+0x38                                 91,924
+0x52                                 89,441
+0x53                                 89,359
+0x45                                 80,082
+0x37                                 79,419
+0x43                                 79,314
+0x4d                                 77,386
+0x76                                 69,572
+0x78                                 68,254
+0x56                                 57,997
+0x77                                 54,786
+0x79                                 53,016
+0x54                                 33,781
+0x7a                                 32,467
+0x49                                 27,084
+0x41                                 26,442
+0x44                                 25,109
+0x50                                 24,138
+0x6a                                 21,323
+0x4f                                 19,193
+0x4c                                 17,141
+0x71                                 16,735
+0x4e                                 16,685
+0x42                                 14,790
+0x46                                 13,113
+0x47                                 11,665
+0x48                                 10,742
+0x57                                  8,833
+0x58                                  8,751
+0x55                                  7,442
+0x5a                                  5,309
+0x2b                                  5,004
+0x4b                                  4,866
+0x4a                                  3,293
+0x51                                  3,161
+0x20                                  2,854
+0x59                                  2,452
+0x7e                                    853
+0x3a                                    817
+0x28                                    744
+0x21                                    589
+0x2c                                    522
+0x5b                                    338
+0x29                                    319
+0x5d                                    230
+0x26                                    169
+0x23                                    159
+0x27                                    112
+0x40                                    102
+0x2a                                     79
+0x3e                                     63
+0x3c                                     58
+0x25                                     54
+0x3d                                     51
+0xe4                                     36
+0x24                                     29
+0x3f                                     29
+0xc3                                     13
+0x8                                       8
+0x5e                                      8
+0x3b                                      7
+0x7b                                      6
+0x7d                                      6
+0xa4                                      5
+0xe5                                      5
+0xf6                                      5
+0x7c                                      4
+0x5c                                      3
+0xfc                                      3
+0x7f                                      2
+0x8a                                      2
+0x3                                       1
+0x10                                      1
+0x84                                      1
+0x94                                      1
+0xae                                      1
+0xc4                                      1
+0xe1                                      1
+0xe9                                      1
+0xf8                                      1
+Label distribution...                  0.02 sec.  [ 10.31 sec.]
+Compacting...                 
+Initial output size              23,597,846
+Moved 25 states, output size     22,151,020
+Moved 50 states, output size     21,997,568
+Moved 75 states, output size     21,917,842
+Moved 100 states, output size    21,870,807
+Moved 125 states, output size    21,836,566
+Moved 150 states, output size    21,819,816
+Will move 150 states, final size   21,819,816
+Compacting...                         51.53 sec.  [ 72.74 sec.]
+Serializing CFSA2...                  63.95 sec.  [ 73.95 sec.]

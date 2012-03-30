@@ -1,0 +1,148 @@
+Assuming input is already sorted
+Building FSA...                        0.01 sec.  [  0.16 sec.]
+Input sequences                     219,862
+Warning: input contained carriage returns?
+Statistics...                          0.10 sec.  [  0.27 sec.]
+Nodes                               216,895
+Arcs                                436,756
+Tail nodes                            5,279
+States with the given # of outgoing arcs:
+  #1                                113,545
+  #2                                 57,249
+  #3                                 12,363
+  #4                                  7,142
+  #5                                 22,505
+  #6                                  2,609
+  #7                                    429
+  #8                                    268
+  #9                                    193
+  #10                                   138
+  #11                                    91
+  #12                                    77
+  #13                                    60
+  #14                                    47
+  #15                                    45
+  #16                                    22
+  #17                                    27
+  #18                                    19
+  #19                                    18
+  #20                                    15
+  #21                                     5
+  #22                                    10
+  #23                                     2
+  #24                                     7
+  #25                                     3
+  #26                                     1
+  #27                                     2
+  #28                                     1
+  #29                                     0
+  #30                                     0
+  #31                                     0
+  #32                                     0
+  #33                                     0
+  #34                                     0
+  #35                                     0
+  #36                                     0
+  #37                                     0
+  #38                                     0
+  #39                                     0
+  #40                                     0
+  #41                                     0
+  #42                                     0
+  #43                                     0
+  #44                                     0
+  #45                                     0
+  #46                                     0
+  #47                                     0
+  #48                                     0
+  #49                                     0
+  #50                                     0
+  #51                                     0
+  #52                                     0
+  #53                                     0
+  #54                                     0
+  #55                                     0
+  #56                                     0
+  #57                                     1
+FSA builder properties:
+Serialization buffer size         5,242,880
+Serialization buffer reallocs             1
+Constant arc FSA size             2,674,296
+Max active path                          35
+Registry hash slots                  16,384
+Registry hash entries                 5,280
+Estimated mem consumption (MB)       5.0625
+est. number storage                 219,863
+Serializing CFSA2...          
+Label distribution...         
+0xd                                  82,131
+0x65                                 60,011
+0x6e                                 52,961
+0x73                                 49,830
+0x72                                 36,232
+0x74                                 29,409
+0x6d                                 27,321
+0x69                                 14,354
+0x64                                  9,828
+0x6c                                  9,689
+0x67                                  8,633
+0x68                                  8,607
+0x61                                  8,043
+0x63                                  6,490
+0x75                                  6,141
+0x6f                                  4,281
+0x62                                  3,641
+0x66                                  3,634
+0x6b                                  3,285
+0x70                                  2,218
+0x31                                  2,169
+0x7a                                  2,005
+0x33                                  1,338
+0x77                                  1,274
+0x53                                    926
+0x76                                    877
+0x35                                    729
+0x79                                    236
+0x6a                                    142
+0x78                                    126
+0x71                                     96
+0x41                                      8
+0x43                                      7
+0x4f                                      7
+0x44                                      6
+0x49                                      6
+0x4b                                      6
+0x42                                      5
+0x48                                      5
+0x4e                                      5
+0x57                                      5
+0x50                                      4
+0x52                                      4
+0x46                                      3
+0x47                                      3
+0x54                                      3
+0x55                                      3
+0x4c                                      2
+0x4d                                      2
+0x51                                      2
+0x56                                      2
+0x58                                      2
+0x5a                                      2
+0x30                                      1
+0x32                                      1
+0x34                                      1
+0x45                                      1
+0x4a                                      1
+0x59                                      1
+Label distribution...                  0.01 sec.  [  0.41 sec.]
+Compacting...                 
+Initial output size                 947,021
+Moved 25 states, output size        813,235
+Moved 50 states, output size        811,966
+Moved 75 states, output size        811,545
+Moved 100 states, output size       811,237
+Moved 125 states, output size       810,991
+Moved 150 states, output size       810,793
+Will move 150 states, final size      810,793
+Compacting...                          0.86 sec.  [  1.56 sec.]
+Serializing CFSA2...                   1.29 sec.  [  1.66 sec.]

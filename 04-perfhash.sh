@@ -13,6 +13,7 @@ function morfologik_cfsa2 {
        --format cfsa2 \
        --progress \
        --sorted -i $1 \
+       --stats \
        -o $2 >$2.stdout 2>&1
 }
 
@@ -24,6 +25,7 @@ function morfologik_cfsa2_numvint {
        --progress \
        --with-numbers \
        --sorted -i $1 \
+       --stats \
        -o $2 >$2.stdout 2>&1
 }
 
@@ -35,6 +37,7 @@ function morfologik_cfsa2_numfixed {
        --progress \
        --with-numbers \
        --sorted -i $1 \
+       --stats \
        -o $2 >$2.stdout 2>&1
 }
 
